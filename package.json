@@ -1,0 +1,20 @@
+{
+  "name": "curato",
+  "version": "1.0.0",
+  "description": "Curate and share your experiences",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flowerco/curato.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flowerco/curato/issues"
+  },
+  "homepage": "https://github.com/flowerco/curato#readme"
+}
