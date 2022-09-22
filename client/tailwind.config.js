@@ -10,6 +10,12 @@ module.exports = {
     extend: {
       fontFamily: {
         'header': ['Oleo Script', ...defaultTheme.fontFamily.sans]
+      },
+      colors: {
+        customPurple: '#8d8dda',
+        customBlue: '#859df2',
+        customOrange: '#edc68c',
+        customTeal: '#09E0C6',
       }
     },
   },

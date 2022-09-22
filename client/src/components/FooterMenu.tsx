@@ -23,7 +23,7 @@ function FooterMenu(): ReactElement {
   // `);
 
   return (
-    <div className="sm:hidden fixed bottom-0 left-0 right-0">
+    <div className="sm:hidden py-2 bg-white fixed bottom-0 left-0 right-0">
       <BottomNavigation
         showLabels
         value={screen}
@@ -33,7 +33,7 @@ function FooterMenu(): ReactElement {
       >
         <BottomNavigationAction label="Albums" icon={<CollectionsIcon />} />
         <BottomNavigationAction label="Friends" icon={<PeopleIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Favourites" icon={<FavoriteIcon />} />
       </BottomNavigation>
     </div>
   );

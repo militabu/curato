@@ -1,25 +1,23 @@
 import React, { ReactElement } from "react";
 import { useAppSelector } from "../redux/hooks";
+import AlbumListScreen from "./screenComponents/AlbumListScreen";
+import ContactsScreen from "./screenComponents/ContactsScreen";
+import FavouritesScreen from "./screenComponents/FavouritesScreen";
+import { Fab, Zoom } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 function MainScreen(): ReactElement {
 
-  const screen: number = useAppSelector(state => state.screen);
-
-  const colorMap : { [key:string]: number|string}= {
-    '0' : '#8d8dda',
-    '1' : '#859df2',
-    '2' : '#edc68c'
-  }
-
-  const bgClass = `flex font-bold bg-[${colorMap[screen.toString()]}]`;
-
-  console.log('Selected background color: ', bgClass);
+  const screenNum: number = useAppSelector(state => state.screen);
+  const screensList: ReactElement[] = [<AlbumListScreen />, <ContactsScreen />, <FavouritesScreen />]
+  const screen = screensList[screenNum];
 
   return (
-    <div className={bgClass}>
-      <div className="text-3xl underline">
-        Here is the Main Screen!
-      </div>
+    <div className="h-full flex justify-center items-center sm:bg-customPurple">
+      {screen}
+      <Fab size="large" color="primary" style={{position: 'fixed', bottom: '6rem', right: '3rem'}}>
+        <AddIcon />
+      </Fab>
     </div>
   );
 }
