@@ -1,7 +1,7 @@
 export type AlbumType = {
   id: string,
   title: string,
-  date: Date,
-  favourite: boolean,
+  date: number,
+  favorite: boolean,
   img: string
 }

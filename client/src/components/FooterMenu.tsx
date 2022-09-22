@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles';
 
 function FooterMenu(): ReactElement {
 
-  const screen = useAppSelector(state => state.screen);
+  const screen = useAppSelector(state => state.screenReducer);
   const dispatch = useAppDispatch();
 
   // Optional styling for the bottom navigation icons
@@ -30,10 +30,10 @@ function FooterMenu(): ReactElement {
         onChange={(event, newValue) => {
           dispatch(actions.changeScreen(newValue));
         }}
-      >
+      > 
         <BottomNavigationAction label="Albums" icon={<CollectionsIcon />} />
         <BottomNavigationAction label="Friends" icon={<PeopleIcon />} />
-        <BottomNavigationAction label="Favourites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
       </BottomNavigation>
     </div>
   );

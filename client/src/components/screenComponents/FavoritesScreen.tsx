@@ -9,8 +9,8 @@ function AlbumListScreen() : ReactElement {
   const albumList : AlbumType[] = useAppSelector(state => state.albumsReducer);
 
   return (
-    <div className="h-full w-full overflow-y-scroll flex flex-col justify-start items-center bg-customPurple">
-      {albumList.map(album => <Album key={album.id} {...album} />)}
+    <div className="h-full w-full overflow-y-scroll flex flex-col justify-start items-center bg-customOrange">
+      {albumList.filter(album => album.favorite).map(album => <Album key={album.id} {...album} />)}
     </div>
   )
 }

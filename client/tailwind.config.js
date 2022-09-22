@@ -15,7 +15,9 @@ module.exports = {
         customPurple: '#8d8dda',
         customBlue: '#859df2',
         customOrange: '#edc68c',
-        customTeal: '#09E0C6',
+        customTeal: '#09e0c6',
+        customPink: '#bc768f',
+        customGreen: '#b2ef9b',
       }
     },
   },
