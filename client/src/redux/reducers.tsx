@@ -1,72 +1,7 @@
 import { type } from "os";
 import { combineReducers } from 'redux';
 import { AlbumType } from "../customTypes";
-
-const albumList : AlbumType[] = [
-  {
-    id:'1',
-    title: 'Portugal',
-    date: Date.now(),
-    favorite: true,
-    img: 'https://assets3.thrillist.com/v1/image/2418477/1536x864/crop;webp=auto;jpeg_quality=60;progressive.jpg'
-  },
-  {
-    id:'2',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'3',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'4',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'5',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'6',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'7',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'8',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-  {
-    id:'9',
-    title: 'Boston',
-    date: Date.now(),
-    favorite: false,
-    img: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9'
-  },
-]
+import { albumList } from './mocks';
 
 const screenReducer = (
     state = {screen: 0, viewAlbum: false, editAlbum: false, activeAlbum: {} as AlbumType}, 
@@ -86,6 +21,17 @@ const screenReducer = (
         viewAlbum: true,
         activeAlbum: action.payload
       }
+      case 'EDIT_ALBUM':
+        return {
+          ...state,
+          editAlbum: true,
+          activeAlbum: action.payload
+        }
+      case 'TOGGLE_EDIT':
+        return {
+          ...state,
+          editAlbum: !state.editAlbum,
+        }
     default : return state;
   }
 }

@@ -17,6 +17,20 @@ export const viewAlbum = (album: AlbumType) => {
   }
 }
 
+export const toggleAlbumEdit = () => {
+  return {
+    type: 'TOGGLE_EDIT',
+  }
+}
+
+export const editAlbum = (album: AlbumType) => {
+  console.log('Trying to edit album:', album);
+  return {
+    type: 'EDIT_ALBUM', 
+    payload: album,
+  }
+}
+
 export const toggleFavorite = (id: string) => {
   return {
     type: 'TOGGLE_FAVE',
@@ -26,11 +40,6 @@ export const toggleFavorite = (id: string) => {
 
 // CRUD actions for the album database
 
-export const createAlbum = () => {
-  return {
-    type: 'CREATE_ALBUM',
-  }
-}
 
 export const fetchAlbums = () => {
   return {

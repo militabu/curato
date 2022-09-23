@@ -18,7 +18,7 @@ function Album(album: AlbumType): ReactElement {
 
   return (
     <div 
-      className="bg-white h-1/6 p-4 mx-4 mt-4 rounded-md flex justify-between z-0"
+      className="bg-white h-28 p-4 mx-4 mt-4 rounded-md flex justify-between z-0"
       onClick={() => dispatch(actions.viewAlbum(album))}
     >
       <div className="flex flex-col justify-center items-start" >
@@ -34,8 +34,8 @@ function Album(album: AlbumType): ReactElement {
             {album.favorite ? <FavoriteIcon fontSize="large"/> : <FavoriteBorderIcon fontSize="large"/>}
           </IconButton>
         </div>
-        <div className="h-full object-cover">
-          <img src={album.img} alt="Album primary pic" />
+        <div className="h-full">
+          <img className="h-full w-full object-cover" src={album.coverImg} alt="Album primary pic" />
         </div>
       </div>
     </div>
