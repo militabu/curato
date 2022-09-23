@@ -3,12 +3,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
 import IconButton from '@mui/material/IconButton';
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { ScreenState } from "../customTypes";
+import { editAlbum } from "../redux/actions";
 
 function Navbar() : ReactElement {
 
   const screen: ScreenState = useAppSelector(state => state.screenReducer);
+  const dispatch = useAppDispatch();
 
   return (
     <nav className="flex items-center justify-between pl-6 pr-3 py-3 z-50 bg-white sm:bg-customPurple sm:text-white sticky top-0 left-0 right-0">
@@ -25,8 +27,11 @@ function Navbar() : ReactElement {
             <ShareIcon fontSize="large"/> 
           </IconButton> : <></>}
 
-        <IconButton color='inherit'>
-          { screen.viewAlbum ? <EditIcon fontSize="large"/> : <SettingsIcon fontSize="large"/> }
+        <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}}color='inherit'>
+          { screen.viewAlbum 
+            ? <EditIcon fontSize="large"/> 
+            : <SettingsIcon fontSize="large"/> 
+          }
         </IconButton>
 
       </div>

@@ -14,3 +14,11 @@ export type ScreenState = {
   editAlbum: boolean;
   activeAlbum: AlbumType;
 };
+
+export type AlbumInputData = {
+  title: string;
+  date: number;
+  description: string;
+  coverImg: string;
+  images: string[];
+};

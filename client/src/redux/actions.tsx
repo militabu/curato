@@ -1,6 +1,6 @@
 // Actions to update the screen / view
 
-import { AlbumType } from "../customTypes"
+import { AlbumInputData, AlbumType } from "../customTypes"
 
 export const changeScreen = (value: number) => {
   return {
@@ -26,7 +26,7 @@ export const toggleAlbumEdit = () => {
 export const editAlbum = (album: AlbumType) => {
   // console.log('Trying to edit album:', album);
   return {
-    type: 'EDIT_ALBUM', 
+    type: 'EDIT_ALBUM',
     payload: album,
   }
 }
@@ -40,10 +40,17 @@ export const toggleFavorite = (id: string) => {
 
 // CRUD actions for the album database
 
-
 export const fetchAlbums = () => {
   return {
     type: 'FETCH_ALBUMS',
+  }
+}
+
+export const addAlbum = (albumData: AlbumInputData) => {
+  console.log('Trying to add an album: ', albumData);
+  return {
+    type: 'ADD_ALBUM',
+    payload: albumData
   }
 }
 

@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactElement } from "react";
+import { ReactElement } from "react";
 import { AlbumType } from '../../customTypes';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';

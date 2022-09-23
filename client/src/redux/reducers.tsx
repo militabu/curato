@@ -1,6 +1,5 @@
-import { type } from "os";
 import { combineReducers } from 'redux';
-import { AlbumType } from "../customTypes";
+import { AlbumInputData, AlbumType } from "../customTypes";
 import { albumList } from './mocks';
 
 const screenReducer = (
@@ -36,12 +35,21 @@ const screenReducer = (
   }
 }
 
-const initialAlbumState = [] as AlbumType[];
+// const initialAlbumState = [] as AlbumType[];
 
-const albumsReducer = (state = albumList, action: { type: string, payload?: number | string}) => {
+const albumsReducer = (state = albumList, action: { type: string, payload?: number | string | AlbumInputData}) => {
   switch(action.type) {
     case 'FETCH_ALBUMS':
       return state;
+    case 'ADD_ALBUM':
+      return [
+        ...state,
+        {
+          ...action.payload as AlbumInputData,
+          id:'10',
+          favorite: false,
+        }
+      ];
     case 'TOGGLE_FAVE':
       return state.map(album => (
         {
