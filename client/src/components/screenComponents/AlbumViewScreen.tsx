@@ -38,9 +38,9 @@ function AlbumViewScreen(album: AlbumType) : ReactElement {
       </div>
       <div className="w-full my-4"> 
         <div className="grid grid-cols-2 gap-4">
-          { album.images.map(image => {
+          { album.images.map((image, index) => {
               return (
-              <div className="border-2 border-solid aspect-square flex items-center justify-center">
+              <div key={index} className="border-2 border-solid aspect-square flex items-center justify-center">
                 <img className="object-cover w-full h-full" src={image}/>
               </div>
               );

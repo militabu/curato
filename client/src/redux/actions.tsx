@@ -10,7 +10,7 @@ export const changeScreen = (value: number) => {
 }
 
 export const viewAlbum = (album: AlbumType) => {
-  console.log('Trying to view album:', album);
+  // console.log('Trying to view album:', album);
   return {
     type: 'VIEW_ALBUM', 
     payload: album,
@@ -24,7 +24,7 @@ export const toggleAlbumEdit = () => {
 }
 
 export const editAlbum = (album: AlbumType) => {
-  console.log('Trying to edit album:', album);
+  // console.log('Trying to edit album:', album);
   return {
     type: 'EDIT_ALBUM', 
     payload: album,
