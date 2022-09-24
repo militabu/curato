@@ -38,6 +38,19 @@ export const toggleFavorite = (id: string) => {
   }
 }
 
+export const setUploading = (uploading: boolean) => {
+  return {
+    type: 'SET_UPLOADING',
+    payload: uploading,
+  }
+}
+
+export const toggleOffline = () => {
+  return {
+    type: 'TOGGLE_OFFLINE',
+  }
+}
+
 // CRUD actions for the album database
 
 export const fetchAlbums = () => {

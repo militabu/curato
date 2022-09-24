@@ -3,7 +3,7 @@ import { AlbumInputData, AlbumType } from "../customTypes";
 import { albumList } from './mocks';
 
 const screenReducer = (
-    state = {screen: 0, viewAlbum: false, editAlbum: false, activeAlbum: {} as AlbumType}, 
+    state = {screen: 0, viewAlbum: false, editAlbum: false, uploading: false, offline: false, activeAlbum: {} as AlbumType}, 
     action: { type: string, payload?: number | AlbumType}
   ) => {
   switch(action.type) {
@@ -31,6 +31,10 @@ const screenReducer = (
           ...state,
           editAlbum: !state.editAlbum,
         }
+      case 'TOGGLE_OFFLINE':
+        return {...state, offline: !state.offline};
+      case 'SET_UPLOADING':
+        return {...state, uploading: action.payload};
     default : return state;
   }
 }

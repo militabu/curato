@@ -16,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/flowerco/curato/issues"
   },
-  "homepage": "https://github.com/flowerco/curato#readme"
+  "homepage": "https://github.com/flowerco/curato#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "eslint": "^8.24.0",
+    "eslint-plugin-react": "^7.31.8"
+  }
 }

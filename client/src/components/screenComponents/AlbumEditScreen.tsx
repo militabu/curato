@@ -4,61 +4,47 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addAlbum, toggleAlbumEdit } from "../../redux/actions";
+import { addAlbum, toggleAlbumEdit, toggleOffline, setUploading } from "../../redux/actions";
+import { LineAxisOutlined } from "@mui/icons-material";
+import axios, { AxiosResponse } from 'axios';
+import ImagePickerSquare from "../imageComponents/ImagePickerSquare";
+import { toBase64 } from "../../utils/utils";
+import { postAlbum } from "../../utils/api-client";
 
 function AlbumEditScreen(): ReactElement {
   
-  let initialState: AlbumInputData = {
+  let initialState: AlbumType = {
+    id: "",
     title: "",
     date: Date.now(),
     description: "",
+    favorite: false,
     coverImg: "",
     images: [],
   };
-
-  const sanitize = (album: AlbumType) => {
-    return {
-      title: album.title,
-      date: album.date,
-      description: album.description,
-      coverImg: album.coverImg,
-      images: album.images,
-    } as AlbumInputData
-  }
   
   const screenState: ScreenState = useAppSelector(state => state.screenReducer);
+
+  // Some local state management, to create an album with image links, and an actual list of image files.
+  const [formState, setFormState] = useState(initialState);
+  const [imageList, setImageList] = useState([] as File[]);
+
+  const dispatch = useAppDispatch();
+
   // If there is an active album (ie. we selected 'edit' from inside an album) then update the initial state with the album data.
   useEffect(() => {
     if (screenState.activeAlbum) {
-      initialState = sanitize(screenState.activeAlbum);
-
-      // for (const key in initialState) {
-      //   const album = screenState.activeAlbum;
-      //   const value = album[key as keyof AlbumType];
-      //   initialState[key as keyof AlbumInputData] = value;
-      // }
-      // Object.entries(initialState).forEach(([key, value], index) => {
-      //   initialState[key] = screenState.activeAlbum[key]);
-      // }
-
-      // Object.keys(initialState).forEach((_key) => {
-      //   const key = _key as keyof AlbumType;
-      //   console.log(screenState.activeAlbum[key]);
-      //   initialState[key] = screenState.activeAlbum[key];
-      // })
-
-      // Object.keys(initialState).forEach(key => key in screenState.activeAlbum ? initialState[key] = screenState.activeAlbum[key] : null)
-    
+      initialState = screenState.activeAlbum;
     }
-    // console.log('Form state starts as: ', formState);
     console.log('Screen state starts as: ', screenState);
   }, [])
-  
-  const [formState, setFormState] = useState(initialState);
-  const dispatch = useAppDispatch();
-
   // useEffect(() => console.log('Form state is now: ', formState), [formState]);
   
+  const validateForm = () => {
+    return !formState.title || !formState.description || !(formState.images.length > 0);
+  }
+
+  // EVENT HANDLERS
   const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
     setFormState({
@@ -82,18 +68,73 @@ function AlbumEditScreen(): ReactElement {
     }
     */
 
-    // Add the new Album to the AlbumList state in Redux
-    dispatch(addAlbum({...formState, coverImg: formState.images[0]}));
+    // 1. Upload the files to get the image URLs for the Album
+    // uploadSelectedImages();
+
+    // 2. Add this album to MongoDB so that we can get the MongoDB ID to complete the Album object
+    console.log('Trying to post the following album to the server: ', formState);
+    console.log('ENV var for the username: ', process.env.REACT_APP_USER);
+    // const albumID = postAlbum(process.env.REACT_APP_USER, formState);
+
+    // 3. Add the new Album to the AlbumList state in Redux
+    // dispatch(addAlbum({...formState, coverImg: formState.images[0]}));
+
     // Remove the editAlbum flag to hide the editing screen
-    dispatch(toggleAlbumEdit());
+    // dispatch(toggleAlbumEdit());
   }
 
-  // Helper function to show a selected image and update the local form state
+  // Simplifying the tutorial I reviewed massively: assume there is an internet connection and upload files.
+  // TODO: For a fully functioning PWA we will need to store the files locally when offline.
+
+  const uploadSelectedImages = () => {
+    if (imageList.length > 0) {
+      dispatch(setUploading(true));
+      for (let i = 0; i < imageList.length; i++) {
+          console.log('Trying to upload image: ', imageList[i]);
+          // Convert image to base 64 string for uploading
+          toBase64(imageList[i])
+          // Upload to Cloudinary
+          .then((res) => axios.post(
+              `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+              {
+                  file: res,
+                  upload_preset: process.env.REACT_APP_UPLOAD_PRESET
+              }
+          )).then(
+            (res) => {
+              // Confirm the upload, then add the returned URL to the image list for this album.
+              checkUploadStatus(res)
+              setFormState({
+                ...formState,
+                images: [
+                  ...formState.images,
+                  res.data.url
+                ]
+              })              
+            }
+          ).catch((err) => {
+              console.log('ERROR: ', err);
+          })
+      }
+      dispatch(setUploading(false));
+    }
+  }
+
+  const checkUploadStatus = (response: AxiosResponse<any, any>) => {
+      dispatch(setUploading(false));
+      if (response.status === 200) {
+          alert('Images Uploaded to Cloudinary Media Library');
+      } else {
+          alert('Sorry, we encountered an error uploading your images');
+      }
+  }
+
+  // Helper function to show a selected image and update the local state
   const handleImage = (event: React.FormEvent<HTMLInputElement>) => {
 
     const imageId = event.currentTarget.id;
-    console.log(`Target label div ID: ${imageId}Label`);
-    const preview = document.querySelector(`#${imageId}Label`);
+    console.log(`Target label div ID: ${imageId}Box`);
+    const preview = document.querySelector(`#${imageId}Box`);
 
     // Remove the big plus icon from the label div
     while (preview?.firstChild) {
@@ -118,17 +159,17 @@ function AlbumEditScreen(): ReactElement {
         ...formState,
         images: [...formState.images, image.src]
       });
+      setImageList([
+        ...imageList,
+        imgFile
+      ]);
     } else {
       const errPara = document.createElement('p');
       errPara.textContent = 'No file found';
       preview?.appendChild(errPara);
     }
   }
-  // return (
-  //   <>
-  //     <h1>Hello!</h1>
-  //   </>
-  // )
+
   return (
     <>
       <nav className="w-full flex items-center justify-between pl-3 pr-3 py-3 z-50 bg-white sticky top-0 left-0 right-0">
@@ -145,6 +186,7 @@ function AlbumEditScreen(): ReactElement {
           type="submit"
           form="imageForm"
           className="text-xl mr-3 px-8 py-2 rounded-md bg-customTeal font-semibold"
+          disabled={validateForm()}
           onClick={handleSubmit}
         >
           Save
@@ -160,29 +202,33 @@ function AlbumEditScreen(): ReactElement {
           <div className="grid grid-cols-2 gap-4">
 
             {/* Always show 6 boxes in the grid, either with plus signs or the existing images. */}
-            {[0, 1, 2, 3, 4, 5].map((element, index) => (
-              <div key={index}>
-                <label
-                  id={`image${index}Label`}
-                  htmlFor={`image${index}`}
-                  className="aspect-square flex items-center justify-center bg-white shadow-md"
-                >
-                  {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
-                  { Object.keys(screenState.activeAlbum).length > 0 && screenState.activeAlbum.images[index]
-                    ? <img className="h-full w-full object-cover" src={screenState.activeAlbum.images[index]}></img> 
-                    : <AddIcon style={{ fontSize: "3rem" }} /> 
-                  }
-                </label>
-                <input
-                  id={`image${index}`}
-                  className="hidden"
-                  type="file"
-                  name="image1"
-                  accept="image/x-png,image/jpeg,image/gif"
-                  onChange={handleImage}
-                ></input>
-            </div>
-            ))}
+            {[0, 1, 2, 3, 4, 5].map((element, index) => {
+                return(
+                  <div key={index}>
+                    <label
+                      id={`image${index}Box`}
+                      htmlFor={`image${index}`}
+                      className="aspect-square flex items-center justify-center bg-white shadow-md"
+                    >
+                      {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
+                      { Object.keys(screenState.activeAlbum).length > 0 && screenState.activeAlbum.images[index]
+                        ? <img className="h-full w-full object-cover" src={screenState.activeAlbum.images[index]}></img> 
+                        : <AddIcon style={{ fontSize: "3rem" }} /> 
+                      }
+                    </label>
+                    <input
+                      id={`image${index}`}
+                      className="hidden"
+                      type="file"
+                      name="image1"
+                      accept="image/x-png,image/jpeg,image/gif"
+                      onChange={handleImage}
+                    ></input>
+                  </div>
+                )
+              }
+            )
+          }
           </div>
         </div>
       </div>
