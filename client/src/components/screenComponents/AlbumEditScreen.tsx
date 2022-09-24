@@ -28,27 +28,31 @@ function AlbumEditScreen(): ReactElement {
   
   const screenState: ScreenState = useAppSelector(state => state.screenReducer);
   // If there is an active album (ie. we selected 'edit' from inside an album) then update the initial state with the album data.
-  if (screenState.activeAlbum) {
-    initialState = sanitize(screenState.activeAlbum);
+  useEffect(() => {
+    if (screenState.activeAlbum) {
+      initialState = sanitize(screenState.activeAlbum);
 
-    // for (const key in initialState) {
-    //   const album = screenState.activeAlbum;
-    //   const value = album[key as keyof AlbumType];
-    //   initialState[key as keyof AlbumInputData] = value;
-    // }
-    // Object.entries(initialState).forEach(([key, value], index) => {
-    //   initialState[key] = screenState.activeAlbum[key]);
-    // }
+      // for (const key in initialState) {
+      //   const album = screenState.activeAlbum;
+      //   const value = album[key as keyof AlbumType];
+      //   initialState[key as keyof AlbumInputData] = value;
+      // }
+      // Object.entries(initialState).forEach(([key, value], index) => {
+      //   initialState[key] = screenState.activeAlbum[key]);
+      // }
 
-    // Object.keys(initialState).forEach((_key) => {
-    //   const key = _key as keyof AlbumType;
-    //   console.log(screenState.activeAlbum[key]);
-    //   initialState[key] = screenState.activeAlbum[key];
-    // })
+      // Object.keys(initialState).forEach((_key) => {
+      //   const key = _key as keyof AlbumType;
+      //   console.log(screenState.activeAlbum[key]);
+      //   initialState[key] = screenState.activeAlbum[key];
+      // })
 
-    // Object.keys(initialState).forEach(key => key in screenState.activeAlbum ? initialState[key] = screenState.activeAlbum[key] : null)
-  
-  }
+      // Object.keys(initialState).forEach(key => key in screenState.activeAlbum ? initialState[key] = screenState.activeAlbum[key] : null)
+    
+    }
+    // console.log('Form state starts as: ', formState);
+    console.log('Screen state starts as: ', screenState);
+  }, [])
   
   const [formState, setFormState] = useState(initialState);
   const dispatch = useAppDispatch();
@@ -120,7 +124,11 @@ function AlbumEditScreen(): ReactElement {
       preview?.appendChild(errPara);
     }
   }
-
+  // return (
+  //   <>
+  //     <h1>Hello!</h1>
+  //   </>
+  // )
   return (
     <>
       <nav className="w-full flex items-center justify-between pl-3 pr-3 py-3 z-50 bg-white sticky top-0 left-0 right-0">
@@ -159,7 +167,8 @@ function AlbumEditScreen(): ReactElement {
                   htmlFor={`image${index}`}
                   className="aspect-square flex items-center justify-center bg-white shadow-md"
                 >
-                  { screenState.activeAlbum.images[index] 
+                  {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
+                  { Object.keys(screenState.activeAlbum).length > 0 && screenState.activeAlbum.images[index]
                     ? <img className="h-full w-full object-cover" src={screenState.activeAlbum.images[index]}></img> 
                     : <AddIcon style={{ fontSize: "3rem" }} /> 
                   }
