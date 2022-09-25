@@ -1,11 +1,12 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { AlbumType } from '../../customTypes';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import * as actions from '../../redux/actions';
 import { formatDate } from '../../utils/utils'
+import { postAlbum } from "../../utils/api-client";
 
 function Album(album: AlbumType): ReactElement {
 
@@ -13,7 +14,9 @@ function Album(album: AlbumType): ReactElement {
 
   const handleFaveClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    return dispatch(actions.toggleFavorite(album.id))
+    // Change the favorite property on the state of the album.
+    // This action also writes to the DB to store the new favorite flag. 
+    dispatch(actions.toggleFavorite(album.id));
   }
 
   return (

@@ -1,19 +1,24 @@
 const mongoose = require('../db');
 
+const albumSchema = new mongoose.Schema({
+  title: String, 
+  date: Number,
+  description: String,
+  favorite: Boolean,
+  coverImg: String,
+  sharedWith: [String],
+  images: {type: [String], default: []}
+})
+const Album = mongoose.model('Album', albumSchema);
+
 const userSchema = new mongoose.Schema({
   userName: String,
   userImg: String,
-  contacts: {type: Array, default: []},
-  albums: {type: Array, default: []}
+  contacts: {type: [String], default: []},
+  friendsAlbums: [{ userId: String, albumId: String }],
+  albums: { type: [albumSchema], default: [] }
 });
 const User = mongoose.model('User', userSchema);
-
-const albumSchema = new mongoose.Schema({
-  title: String, 
-  description: String,
-  imgList: {type: Array, default: []}
-})
-const Album = mongoose.model('Album', albumSchema);
 
 module.exports = { User, Album };
 

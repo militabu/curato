@@ -20,25 +20,21 @@ function AlbumEditScreen(): ReactElement {
     description: "",
     favorite: false,
     coverImg: "",
+    sharedWith: [],
     images: [],
   };
   
-  const screenState: ScreenState = useAppSelector(state => state.screenReducer);
-
+ const screenState: ScreenState = useAppSelector(state => state.screenReducer);
+ 
   // Some local state management, to create an album with image links, and an actual list of image files.
-  const [formState, setFormState] = useState(initialState);
+  // If there is a populated active album (ie. we selected 'edit' from inside an album) then update the initial state with the album data.
+  const [formState, setFormState] = useState((Object.keys(screenState.activeAlbum).length > 0) ? screenState.activeAlbum : initialState);
   const [imageList, setImageList] = useState([] as File[]);
 
   const dispatch = useAppDispatch();
 
-  // If there is an active album (ie. we selected 'edit' from inside an album) then update the initial state with the album data.
-  useEffect(() => {
-    if (screenState.activeAlbum) {
-      initialState = screenState.activeAlbum;
-    }
-    console.log('Screen state starts as: ', screenState);
-  }, [])
-  // useEffect(() => console.log('Form state is now: ', formState), [formState]);
+  useEffect(() => console.log('Album date is: ', screenState.activeAlbum.date), []);
+  useEffect(() => console.log('Initial date is: ', initialState.date), []);
   
   const validateForm = () => {
     return !formState.title || !formState.description || !(formState.images.length > 0);
@@ -53,7 +49,7 @@ function AlbumEditScreen(): ReactElement {
     });
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLElement>) => {
     event.preventDefault();
 
     // TODO: Create an 'Album' element from the form data
@@ -72,15 +68,19 @@ function AlbumEditScreen(): ReactElement {
     // uploadSelectedImages();
 
     // 2. Add this album to MongoDB so that we can get the MongoDB ID to complete the Album object
+    const newAlbum: AlbumType = { ...formState, coverImg: formState.images[0] };
     console.log('Trying to post the following album to the server: ', formState);
     console.log('ENV var for the username: ', process.env.REACT_APP_USER);
-    // const albumID = postAlbum(process.env.REACT_APP_USER, formState);
-
+    const albumID = await postAlbum(process.env.REACT_APP_USER, newAlbum);
+    console.log(`The ID for the ${formState.id ? 'updated' : 'new'} album is : `, albumID);
+   
     // 3. Add the new Album to the AlbumList state in Redux
-    // dispatch(addAlbum({...formState, coverImg: formState.images[0]}));
+    // Set the id for the album if it was just created in Mongo DB
+    if (!newAlbum.id) newAlbum.id = String(albumID);
+    dispatch(addAlbum(newAlbum));
 
     // Remove the editAlbum flag to hide the editing screen
-    // dispatch(toggleAlbumEdit());
+    dispatch(toggleAlbumEdit());
   }
 
   // Simplifying the tutorial I reviewed massively: assume there is an internet connection and upload files.
@@ -180,7 +180,7 @@ function AlbumEditScreen(): ReactElement {
           >
             <ArrowBackIcon fontSize="large" />
           </IconButton>
-          <h1 className="text-2xl">New Album</h1>
+          <h1 className="text-2xl">{ formState.id !== "" ? 'Edit' : 'New'} Album</h1>
         </div>
         <button 
           type="submit"

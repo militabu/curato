@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export type AlbumType = {
   id: string;
   title: string;
@@ -5,6 +7,7 @@ export type AlbumType = {
   description: string;
   favorite: boolean;
   coverImg: string;
+  sharedWith: string[];
   images: string[];
 };
 
@@ -18,9 +21,12 @@ export type ScreenState = {
 };
 
 export type AlbumInputData = {
+  _id: ObjectId;
   title: string;
   date: number;
   description: string;
+  favorite: boolean;
   coverImg: string;
+  sharedWith: string[];
   images: string[];
 };

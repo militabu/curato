@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 import { AlbumInputData, AlbumType } from "../customTypes";
+import { postAlbum } from '../utils/api-client';
+import { updateAlbum } from './actions';
 import { albumList } from './mocks';
 
 const screenReducer = (
@@ -39,28 +41,32 @@ const screenReducer = (
   }
 }
 
-// const initialAlbumState = [] as AlbumType[];
+const initialAlbumState = [] as AlbumType[];
 
-const albumsReducer = (state = albumList, action: { type: string, payload?: number | string | AlbumInputData}) => {
+const albumsReducer = (state = initialAlbumState, action: { type: string, payload?: number | string | AlbumType}) => {
   switch(action.type) {
-    case 'FETCH_ALBUMS':
-      return state;
+    case 'GET_ALBUMS':
+      return action.payload;
     case 'ADD_ALBUM':
       return [
         ...state,
-        {
-          ...action.payload as AlbumInputData,
-          id:'10',
-          favorite: false,
-        }
+        action.payload
       ];
     case 'TOGGLE_FAVE':
-      return state.map(album => (
-        {
-          ...album,
-          favorite: album.id === action.payload ? !album.favorite : album.favorite
-        }
-      ));
+      const newAlbumList = [...state.map(album => {
+          // Update the album with matching ID
+          const updatedAlbum = album.id === action.payload 
+          ? {
+            ...album,
+            favorite: !album.favorite
+          }
+          : album;
+          // Update the album on the DB
+          if (album.id === action.payload) postAlbum(process.env.REACT_APP_USER, updatedAlbum);
+          return updatedAlbum;
+        })
+      ];
+      return newAlbumList;
     default: return state;
   }
 }

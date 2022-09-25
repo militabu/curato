@@ -1,14 +1,16 @@
+import { ObjectFlags } from "typescript";
 import { AlbumType } from "../customTypes";
 
 const baseUrl = 'http://localhost:3210';
 
-const getUser = async (userID: string) => {
+const getUser = async (userId: string) => {
   try {
     const response = await fetch(`${baseUrl}/user`, {
-      method: 'GET', 
-      body: JSON.stringify({ "id": userID })
+      method: 'POST', 
+      headers: { 'Content-Type':'application/json'},
+      body: JSON.stringify({ id : userId })
     });
-    const output = await response.json()
+    const output = await response.json();
     console.log('Fetched the user: ', output);
     return output;
   } catch (err) {
@@ -16,15 +18,17 @@ const getUser = async (userID: string) => {
   }
 }
 
-const postAlbum = async (userID:string, album: AlbumType) => {
+const postAlbum = async (userId:string, album: AlbumType) => {
   try {
-    const response = await fetch(`${baseUrl}/user`, 
+    const response = await fetch(`${baseUrl}/albums`, 
     {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(album),
+      body: JSON.stringify({ userId: userId, album: album }),
     });
-    const output = await response.json()
+    // const output = await response.json();
+    const output = await response.text();
+    console.log('Api post album query returns: ', output);
     return output;
   } catch (err) {
     console.log('Error in the api client postAlbum: ', err);

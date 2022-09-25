@@ -53,13 +53,14 @@ export const toggleOffline = () => {
 
 // CRUD actions for the album database
 
-export const fetchAlbums = () => {
+export const getAlbums = (albumList : AlbumType[]) => {
   return {
-    type: 'FETCH_ALBUMS',
+    type: 'GET_ALBUMS',
+    payload: albumList
   }
 }
 
-export const addAlbum = (albumData: AlbumInputData) => {
+export const addAlbum = (albumData: AlbumType) => {
   console.log('Trying to add an album: ', albumData);
   return {
     type: 'ADD_ALBUM',
