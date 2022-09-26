@@ -40,7 +40,14 @@ export const toggleFavorite = (id: string) => {
 
 export const toggleActiveFavorite = () => {
   return {
-    type: 'UPDATE_ACTIVE'
+    type: 'TOGGLE_ACTIVE_FAVE'
+  }
+}
+
+export const updateActive= (album: AlbumType) => {
+  return {
+    type: 'UPDATE_ACTIVE',
+    payload: album
   }
 }
 
@@ -74,9 +81,11 @@ export const addAlbum = (albumData: AlbumType) => {
   }
 }
 
-export const updateAlbum = () => {
+export const updateAlbum = (updatedAlbum: AlbumType) => {
+  console.log('Trying to update existing album');
   return {
     type: 'UPDATE_ALBUM',
+    payload: updatedAlbum
   }
 }
 

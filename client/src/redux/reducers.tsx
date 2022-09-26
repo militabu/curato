@@ -32,6 +32,8 @@ const screenReducer = (
           editAlbum: !state.editAlbum,
         }
       case 'UPDATE_ACTIVE':
+        return {...state, activeAlbum: action.payload};
+      case 'TOGGLE_ACTIVE_FAVE':
         return {...state, activeAlbum: { ...state.activeAlbum, favorite: !state.activeAlbum.favorite }};
       case 'TOGGLE_OFFLINE':
         return {...state, offline: !state.offline};
@@ -52,6 +54,25 @@ const albumsReducer = (state = initialAlbumState, action: { type: string, payloa
         ...state,
         action.payload
       ];
+    case 'UPDATE_ALBUM':
+      const updatedAlbum = action.payload as AlbumType;
+      const updatedAlbumList = [...state.map(album => {
+        // Update the album with matching ID
+        const newAlbum = album.id === updatedAlbum.id
+        ? {
+          ...updatedAlbum,
+        }
+        : album;
+        return newAlbum;
+      })
+    ];
+      // const updatedlist =  [ ...state.map((album, index) => {
+      //   if (album.id === updatedAlbum.id) {
+      //     album = updatedAlbum;
+      //   }
+      // }) ]
+      console.log('Updated state list is : ', updatedAlbumList);
+      return updatedAlbumList;
     case 'TOGGLE_FAVE':
       const newAlbumList = [...state.map(album => {
           // Update the album with matching ID

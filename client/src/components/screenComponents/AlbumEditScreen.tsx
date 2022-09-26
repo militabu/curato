@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addAlbum, toggleAlbumEdit, setUploading } from "../../redux/actions";
+import { addAlbum, toggleAlbumEdit, setUploading, updateAlbum, updateActive } from "../../redux/actions";
 import axios, { AxiosResponse } from 'axios';
 import { toBase64 } from "../../utils/utils";
 import { postAlbum } from "../../utils/api-client";
@@ -27,13 +27,10 @@ function AlbumEditScreen(): ReactElement {
   // Some local state management, to create an album with image links, and an actual list of image files.
   // If there is a populated active album (ie. we selected 'edit' from inside an album) then update the initial state with the album data.
   const [formState, setFormState] = useState((Object.keys(screenState.activeAlbum).length > 0) ? screenState.activeAlbum : initialState);
-  const [imageList, setImageList] = useState([] as File[]);
+  const [imageList, setImageList] = useState([] as {file:File, index:number}[]);
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => console.log('Album date is: ', screenState.activeAlbum.date), []);
-  useEffect(() => console.log('Initial date is: ', initialState.date), []);
-  
   const validateForm = () => {
     return !formState.title || !formState.description || !(formState.images.length > 0);
   }
@@ -50,32 +47,31 @@ function AlbumEditScreen(): ReactElement {
   const handleSubmit = async (event: React.FormEvent<HTMLElement>) => {
     event.preventDefault();
 
-    // TODO: Create an 'Album' element from the form data
-    // For now this is hardcoded in the reducer, but we'll need to send to Mongo and update state with the Mongo ID
-    /*
-    const newAlbumId = await postAlbum()
-    const newAlbum = {
-      ...formState,
-      id: newAlbumId,
-      favorite: false,
-      coverImg: formState.images[0],
-    }
-    */
-
     // 1. Upload the files to get the image URLs for the Album
-    // uploadSelectedImages();
+    // TODO: The app pauses while this runs, would be great to add a progress bar...
+    const newAlbum: AlbumType = await uploadSelectedImages() ?? {} as AlbumType;
+    console.log('The newAlbum we\'re trying to submit is: ', newAlbum);
+    newAlbum['coverImg'] = newAlbum.images[0];
+    setFormState(newAlbum);
 
     // 2. Add this album to MongoDB so that we can get the MongoDB ID to complete the Album object
-    const newAlbum: AlbumType = { ...formState, coverImg: formState.images[0] };
+    // const newAlbum: AlbumType = { ...formState, coverImg: formState.images[0] };
     console.log('Trying to post the following album to the server: ', formState);
     console.log('ENV var for the username: ', process.env.REACT_APP_USER);
     const albumID = await postAlbum(process.env.REACT_APP_USER, newAlbum);
     console.log(`The ID for the ${formState.id ? 'updated' : 'new'} album is : `, albumID);
    
     // 3. Add the new Album to the AlbumList state in Redux
-    // Set the id for the album if it was just created in Mongo DB
-    if (!newAlbum.id) newAlbum.id = String(albumID);
-    dispatch(addAlbum(newAlbum));
+    // Set the id for the album if it was just created in Mongo DB, otherwise we can update the album List and active album.
+    console.log('Before setting the id, the current ID of the album is: ', newAlbum.id);
+    if (!newAlbum.id) {
+      newAlbum.id = String(albumID);
+      dispatch(addAlbum(newAlbum));
+    } else {
+      dispatch(updateAlbum(newAlbum));
+      dispatch(updateActive(newAlbum));
+    }
+    console.log('After setting the ID: ', newAlbum);
 
     // Remove the editAlbum flag to hide the editing screen
     dispatch(toggleAlbumEdit());
@@ -83,39 +79,46 @@ function AlbumEditScreen(): ReactElement {
 
   // Simplifying the tutorial I reviewed massively: assume there is an internet connection and upload files.
   // TODO: For a fully functioning PWA we will need to store the files locally when offline.
+  // TODO: Should the upload logic be in the backend?
 
-  const uploadSelectedImages = () => {
+  const uploadSelectedImages = async () => {
+    // We create a copy of the state to change directly, so that we don't have to wait for setState before sending to the server.
+    const stateCopy: AlbumType = Object.assign({}, formState);
+    console.log('The state copy we\'re using is: ', stateCopy);
     if (imageList.length > 0) {
       dispatch(setUploading(true));
       for (let i = 0; i < imageList.length; i++) {
-          console.log('Trying to upload image: ', imageList[i]);
-          // Convert image to base 64 string for uploading
-          toBase64(imageList[i])
-          // Upload to Cloudinary
-          .then((res) => axios.post(
-              `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
-              {
-                  file: res,
-                  upload_preset: process.env.REACT_APP_UPLOAD_PRESET
+          const { file, index } = imageList[i];
+          // No need to upload the file if it is already on the server
+          if (stateCopy.images.length <= index || stateCopy.images[index].substring(0,27) !== 'https://res.cloudinary.com') {
+            console.log('Trying to upload image: ', imageList[i]);
+            // Convert image to base 64 string for uploading
+            await toBase64(file)
+            // Upload to Cloudinary
+            .then(async (res) => await axios.post(
+                `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
+                {
+                    file: res,
+                    upload_preset: process.env.REACT_APP_UPLOAD_PRESET
+                }
+            )).then(
+              (res) => {
+                console.log(`New URL for the album image: ${res.data.url}`);
+                // Confirm the upload, then add the returned URL to the image list for this album.
+                checkUploadStatus(res)
+                stateCopy.images[index] = res.data.url;
+                console.log('Updated album with Cloudinary URLs: ', stateCopy);  
               }
-          )).then(
-            (res) => {
-              // Confirm the upload, then add the returned URL to the image list for this album.
-              checkUploadStatus(res)
-              setFormState({
-                ...formState,
-                images: [
-                  ...formState.images,
-                  res.data.url
-                ]
-              })              
-            }
-          ).catch((err) => {
-              console.log('ERROR: ', err);
-          })
+            ).catch((err) => {
+                console.log('ERROR: ', err);
+            })
+          } else {
+            console.log('File does not need to be uploaded, it\'s already on cloudinary.');
+          }
       }
       dispatch(setUploading(false));
     }
+    return stateCopy;
   }
 
   const checkUploadStatus = (response: AxiosResponse<any, any>) => {
@@ -159,7 +162,7 @@ function AlbumEditScreen(): ReactElement {
       });
       setImageList([
         ...imageList,
-        imgFile
+        { file: imgFile, index: Number(imageId.substring(5)) }
       ]);
     } else {
       const errPara = document.createElement('p');
