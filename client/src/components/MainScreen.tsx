@@ -26,7 +26,7 @@ function MainScreen(): ReactElement {
   const screen = screenState.editAlbum ? (
     <AlbumEditScreen />
   ) : screenState.viewAlbum ? (
-    <AlbumViewScreen {...screenState.activeAlbum} />
+    <AlbumViewScreen />
   ) : (
     screensList[screenState.screen]
   );

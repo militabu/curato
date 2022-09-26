@@ -38,6 +38,12 @@ export const toggleFavorite = (id: string) => {
   }
 }
 
+export const toggleActiveFavorite = () => {
+  return {
+    type: 'UPDATE_ACTIVE'
+  }
+}
+
 export const setUploading = (uploading: boolean) => {
   return {
     type: 'SET_UPLOADING',

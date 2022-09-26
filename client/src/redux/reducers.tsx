@@ -33,6 +33,8 @@ const screenReducer = (
           ...state,
           editAlbum: !state.editAlbum,
         }
+      case 'UPDATE_ACTIVE':
+        return {...state, activeAlbum: { ...state.activeAlbum, favorite: !state.activeAlbum.favorite }};
       case 'TOGGLE_OFFLINE':
         return {...state, offline: !state.offline};
       case 'SET_UPLOADING':
