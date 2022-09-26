@@ -1,4 +1,4 @@
-import { AlbumType } from "../customTypes";
+import { AlbumType, UserType } from "../customTypes";
 
 const baseUrl = 'http://localhost:3210';
 
@@ -14,6 +14,22 @@ const getUser = async (userId: string) => {
     return output;
   } catch (err) {
     console.log('Error in the api client getAlbums: ', err);
+  }
+}
+
+const updateUser = async (user: UserType) => {
+  try {
+    const response = await fetch(`${baseUrl}/update-user`,
+    {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(user),
+    });
+    const output = await response.json();
+    console.log('Updating user to ', output);
+    return output;
+  } catch (err) {
+    console.log('Error in the api client updateUser: ', err);
   }
 }
 
@@ -34,4 +50,16 @@ const postAlbum = async (userId:string, album: AlbumType) => {
   }
 }
 
-export { getUser, postAlbum }
+
+const getAllUsers = async () => {
+  try {
+    const response = await fetch(`${baseUrl}/userlist`);
+    const output = await response.json();
+    console.log('Fetched the userlist: ', output);
+    return output;
+  } catch (err) {
+    console.log('Error in the api client getAllUsers: ', err);
+  }
+}
+
+export { getUser, postAlbum, getAllUsers, updateUser }

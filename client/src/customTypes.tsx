@@ -1,5 +1,12 @@
 import { ObjectId } from 'mongodb';
 
+export type UserType = {
+  _id: ObjectId;
+  userName: string;
+  userImg: string;
+  contacts: string[];
+}
+
 export type AlbumType = {
   id: string;
   title: string;

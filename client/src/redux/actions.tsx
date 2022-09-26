@@ -1,6 +1,6 @@
 // Actions to update the screen / view
 
-import { AlbumType } from "../customTypes"
+import { AlbumType, UserType } from "../customTypes"
 
 export const changeScreen = (value: number) => {
   return {
@@ -92,5 +92,25 @@ export const updateAlbum = (updatedAlbum: AlbumType) => {
 export const deleteAlbum = () => {
   return {
     type: 'UPDATE_ALBUM',
+  }
+}
+
+export const getUsers = (userList: UserType[]) => {
+  return {
+    type: 'GET_ALL_USERS',
+    payload: userList
+  }
+}
+
+export const getContacts = () => {
+  return {
+    type: 'GET_CONTACTS'
+  }
+}
+
+export const toggleFollowed = (userId: string) => {
+  return {
+    type: 'TOGGLE_FOLLOWED',
+    payload: userId
   }
 }

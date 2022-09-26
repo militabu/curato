@@ -5,8 +5,8 @@ import MainScreen from './components/MainScreen';
 import Navbar from './components/Navbar';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { ScreenState } from "./customTypes";
-import { getUser } from './utils/api-client';
-import { getAlbums } from './redux/actions';
+import { getUser, getAllUsers } from './utils/api-client';
+import { getAlbums, getUsers } from './redux/actions';
 
 
 function App() {
@@ -18,6 +18,8 @@ function App() {
   useEffect(() => {
     const userId = process.env.REACT_APP_USER
     console.log('App level user ID is: ', userId);
+
+    // On app loading, create the list of albums to show by getting the Mongo DB document for the current user.
     getUser(userId)
       .then((res) => {
         // A bit awkward, but we need to replace the '_id' property from Mongo 
@@ -28,7 +30,10 @@ function App() {
         }
         console.log('Result of fetching user is: ', res);
         dispatch(getAlbums(res.albums));
-      })
+      });
+
+    // To populate the full list of contacts for searching, save it to the redux state here:
+    getAllUsers().then(res => dispatch(getUsers(res)));
   }, []);
 
   // TODO: Currently the navbar hides when editing an album, to instead show a custom navbar in the edit screen.

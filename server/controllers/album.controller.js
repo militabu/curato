@@ -1,32 +1,5 @@
 const { User, Album } = require("../models/schema");
 
-const getUser = async (ctx) => {
-  try {
-    const id = ctx.request.body.id;
-    console.log('Getting user: ', id);
-    let user = await User.findOne({ _id: id });
-    ctx.body = user;
-    ctx.status = 200;
-  } catch (err) {
-    console.log("ERROR: ", err);
-    ctx.status = 400;
-  }
-};
-
-const postUser = (ctx) => {
-  try {
-    const user = ctx.request.body;
-    console.log("Creating new user:", user);
-    const newUser = new User(user);
-    newUser.save();
-    console.log("Inserted _id is ", newUser._id.toString());
-    ctx.status = 201;
-  } catch (err) {
-    console.log("ERROR: ", err);
-    ctx.status = 400;
-  }
-};
-
 const postAlbum = async (ctx) => {
   try {
     const userId = ctx.request.body.userId;
@@ -60,23 +33,6 @@ const postAlbum = async (ctx) => {
   }
 };
 
-const getAllUsers = async (ctx) => {
-  try {
-    const userList = await User.find();
-    ctx.body = userList.map((user) => {
-      return {
-        _id: user._id,
-        userName: user.userName,
-        userImg: user.userImg,
-        contacts: user.contacts,
-      };
-    });
-    ctx.status = 200;
-  } catch (err) {
-    console.log("Error in the server getAllUsers: ", err);
-  }
-};
-
 const deleteAlbums = async (ctx) => {
   try {
     const userId = ctx.request.body.userId;
@@ -90,4 +46,4 @@ const deleteAlbums = async (ctx) => {
   }
 }
 
-module.exports = { getUser, postUser, postAlbum, deleteAlbums, getAllUsers };
+module.exports = { postAlbum, deleteAlbums };

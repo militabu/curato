@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { AlbumType } from "../customTypes";
-import { postAlbum } from '../utils/api-client';
+import { AlbumType, UserType } from "../customTypes";
+import { postAlbum, updateUser } from '../utils/api-client';
 
 const screenReducer = (
     state = {screen: 0, viewAlbum: false, editAlbum: false, uploading: false, offline: false, activeAlbum: {} as AlbumType}, 
@@ -59,18 +59,13 @@ const albumsReducer = (state = initialAlbumState, action: { type: string, payloa
       const updatedAlbumList = [...state.map(album => {
         // Update the album with matching ID
         const newAlbum = album.id === updatedAlbum.id
-        ? {
-          ...updatedAlbum,
-        }
-        : album;
-        return newAlbum;
-      })
-    ];
-      // const updatedlist =  [ ...state.map((album, index) => {
-      //   if (album.id === updatedAlbum.id) {
-      //     album = updatedAlbum;
-      //   }
-      // }) ]
+          ? {
+            ...updatedAlbum,
+          }
+          : album;
+          return newAlbum;
+        })
+      ];
       console.log('Updated state list is : ', updatedAlbumList);
       return updatedAlbumList;
     case 'TOGGLE_FAVE':
@@ -92,9 +87,50 @@ const albumsReducer = (state = initialAlbumState, action: { type: string, payloa
   }
 }
 
+const initialContactsState: UserType[] = [];
+
+const contactsReducer = (state = initialContactsState, action: { type: string, payload: string | UserType }) => {
+  switch(action.type) {
+    case 'GET_ALL_USERS':
+      return action.payload;
+    case 'TOGGLE_FOLLOWED':
+      const contactId = action.payload as string;
+      const newContactsList = [...state.map(user => {
+        // Find the current user, and add or delete the contact from the payload to their contact list.
+        let newContacts: string[] = [];
+        if (user._id.toString() === process.env.REACT_APP_USER) {
+          newContacts = user.contacts;
+          const index = user.contacts.indexOf(contactId);
+          if (index < 0) {
+            newContacts.push(contactId);
+          } else {
+            newContacts.splice(index, 1);
+          }
+        }
+
+        const updatedUser = user._id.toString() === process.env.REACT_APP_USER
+          ? {
+            ...user,
+            contacts: newContacts
+          }
+          : user;
+          // Update the user on the DB
+          if (user._id.toString() === process.env.REACT_APP_USER) {
+            updateUser(updatedUser);
+          }
+          return updatedUser;
+        })
+      ];
+      console.log('After reducer the updated contacts list is: ', newContactsList);
+      return newContactsList;
+    default: return state;
+  }
+}
+
 const reducer = combineReducers({
   screenReducer,
   albumsReducer,
+  contactsReducer
 });
 
 export default reducer;
