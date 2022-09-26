@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
-import { AlbumInputData, AlbumType } from "../customTypes";
+import { AlbumType } from "../customTypes";
 import { postAlbum } from '../utils/api-client';
-import { updateAlbum } from './actions';
-import { albumList } from './mocks';
 
 const screenReducer = (
     state = {screen: 0, viewAlbum: false, editAlbum: false, uploading: false, offline: false, activeAlbum: {} as AlbumType}, 

@@ -4,7 +4,7 @@ import FooterMenu from './components/FooterMenu';
 import MainScreen from './components/MainScreen';
 import Navbar from './components/Navbar';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { AlbumInputData, AlbumType, ScreenState } from "./customTypes";
+import { ScreenState } from "./customTypes";
 import { getUser } from './utils/api-client';
 import { getAlbums } from './redux/actions';
 

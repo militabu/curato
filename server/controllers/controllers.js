@@ -1,4 +1,3 @@
-const { ObjectId } = require("mongodb");
 const { User, Album } = require("../models/schema");
 
 const getUser = async (ctx) => {

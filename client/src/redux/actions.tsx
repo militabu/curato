@@ -1,6 +1,6 @@
 // Actions to update the screen / view
 
-import { AlbumInputData, AlbumType } from "../customTypes"
+import { AlbumType } from "../customTypes"
 
 export const changeScreen = (value: number) => {
   return {

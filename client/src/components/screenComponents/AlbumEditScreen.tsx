@@ -1,13 +1,11 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { AlbumInputData, AlbumType, ScreenState } from "../../customTypes";
+import { AlbumType, ScreenState } from "../../customTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addAlbum, toggleAlbumEdit, toggleOffline, setUploading } from "../../redux/actions";
-import { LineAxisOutlined } from "@mui/icons-material";
+import { addAlbum, toggleAlbumEdit, setUploading } from "../../redux/actions";
 import axios, { AxiosResponse } from 'axios';
-import ImagePickerSquare from "../imageComponents/ImagePickerSquare";
 import { toBase64 } from "../../utils/utils";
 import { postAlbum } from "../../utils/api-client";
 

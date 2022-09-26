@@ -1,8 +1,6 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { AlbumType } from "../../customTypes";
-import { getAlbums } from "../../redux/actions";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getUser } from "../../utils/api-client";
+import { useAppSelector } from "../../redux/hooks";
 import Album from "../albumComponents/Album";
 
 

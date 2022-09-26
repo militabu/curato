@@ -1,13 +1,11 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import { ReactElement } from "react";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import MuiBottomNavigationAction from '@mui/material/BottomNavigationAction';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import PeopleIcon from '@mui/icons-material/People';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import * as actions from '../redux/actions';
-import { styled } from '@mui/material/styles';
 
 function FooterMenu(): ReactElement {
 

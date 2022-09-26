@@ -1,14 +1,13 @@
-import React, { ReactElement } from "react";
+import { ReactElement } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import AlbumListScreen from "./screenComponents/AlbumListScreen";
 import ContactsScreen from "./screenComponents/ContactsScreen";
 import FavoritesScreen from "./screenComponents/FavoritesScreen";
 import AlbumViewScreen from "./screenComponents/AlbumViewScreen";
 import { Fab } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import { toggleAlbumEdit } from "../redux/actions";
-import { AlbumType, ScreenState } from "../customTypes";
+import { ScreenState } from "../customTypes";
 import AlbumEditScreen from "./screenComponents/AlbumEditScreen";
 
 function MainScreen(): ReactElement {

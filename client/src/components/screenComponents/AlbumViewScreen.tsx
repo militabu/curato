@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { AlbumType, ScreenState } from "../../customTypes";
+import { ScreenState } from "../../customTypes";
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -7,7 +7,6 @@ import { useAppDispatch } from "../../redux/hooks";
 import * as actions from '../../redux/actions';
 import { useAppSelector } from "../../redux/hooks";
 import { formatDate } from '../../utils/utils';
-import AddIcon from '@mui/icons-material/Add';
 
 function AlbumViewScreen() : ReactElement {
 
