@@ -85,6 +85,7 @@ function AlbumEditScreen(): ReactElement {
     // We create a copy of the state to change directly, so that we don't have to wait for setState before sending to the server.
     const stateCopy: AlbumType = Object.assign({}, formState);
     console.log('The state copy we\'re using is: ', stateCopy);
+    let error = false;
     if (imageList.length > 0) {
       dispatch(setUploading(true));
       for (let i = 0; i < imageList.length; i++) {
@@ -104,17 +105,20 @@ function AlbumEditScreen(): ReactElement {
             )).then(
               (res) => {
                 console.log(`New URL for the album image: ${res.data.url}`);
-                // Confirm the upload, then add the returned URL to the image list for this album.
+                // Add the returned URL to the image list for this album.
                 checkUploadStatus(res)
                 stateCopy.images[index] = res.data.url;
-                console.log('Updated album with Cloudinary URLs: ', stateCopy);  
               }
             ).catch((err) => {
                 console.log('ERROR: ', err);
+                error = true;
             })
           } else {
             console.log('File does not need to be uploaded, it\'s already on cloudinary.');
           }
+      }
+      if (!error) {
+        alert("All images have been successfully uploaded to the cloud.");
       }
       dispatch(setUploading(false));
     }
@@ -122,11 +126,8 @@ function AlbumEditScreen(): ReactElement {
   }
 
   const checkUploadStatus = (response: AxiosResponse<any, any>) => {
-      dispatch(setUploading(false));
-      if (response.status === 200) {
-          alert('Images Uploaded to Cloudinary Media Library');
-      } else {
-          alert('Sorry, we encountered an error uploading your images');
+      if (response.status !== 200) {
+        alert('Sorry, we encountered an error uploading your images');
       }
   }
 
