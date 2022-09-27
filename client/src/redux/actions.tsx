@@ -89,9 +89,17 @@ export const updateAlbum = (updatedAlbum: AlbumType) => {
   }
 }
 
-export const deleteAlbum = () => {
+export const addContactAlbums = (albums: AlbumType[]) => {
   return {
-    type: 'UPDATE_ALBUM',
+    type: 'ADD_CONTACT_ALBUMS',
+    payload: albums
+  }
+}
+
+export const removeContactAlbums = (contactId: string) => {
+  return {
+    type: 'REMOVE_CONTACT_ALBUMS',
+    payload: contactId
   }
 }
 

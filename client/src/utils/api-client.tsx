@@ -25,9 +25,9 @@ const updateUser = async (user: UserType) => {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(user),
     });
-    const output = await response.json();
-    console.log('Updating user to ', output);
-    return output;
+    // const output = await response.json();
+    // console.log('Updating user to ', output);
+    // return output;
   } catch (err) {
     console.log('Error in the api client updateUser: ', err);
   }

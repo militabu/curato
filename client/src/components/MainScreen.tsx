@@ -32,15 +32,15 @@ function MainScreen(): ReactElement {
 
   // Note: Only show the floating action button (Fab) on the Albums screen (screen 0), and not if editing or viewing an album.
   return (
-    <div className="h-full flex flex-col justify-center items-center sm:bg-customPurple sm:px-20">
+    <div className="h-full flex flex-col justify-center items-center sm:bg-customPurple">
       {screen}
       {!screenState.viewAlbum && !screenState.editAlbum && screenState.screen === 0 ? (
         <Fab
           onClick={() => dispatch(toggleAlbumEdit())}
+          className="right-8 sm:right-32"
           style={{
             position: "fixed",
             bottom: "7rem",
-            right: "2rem",
             backgroundColor: "#09e0c6",
             border: "none",
             height: '4rem',

@@ -9,7 +9,7 @@ function AlbumListScreen() : ReactElement {
   const albumList : AlbumType[] = useAppSelector(state => state.albumsReducer);
 
   return (
-    <div className="h-full w-full overflow-y-auto flex flex-col justify-start items-center bg-customPurple">
+    <div className="h-full w-full overflow-y-auto flex flex-col justify-start items-center bg-customPurple sm:max-w-2xl sm:mt-4 sm:mb-10 sm:rounded-lg">
       {albumList.map(album => <Album key={album.id} {...album} />)}
     </div>
   )

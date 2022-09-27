@@ -2,14 +2,19 @@ import { ReactElement } from "react";
 import { UserType } from '../../customTypes';
 import { useAppDispatch } from "../../redux/hooks";
 import * as actions from '../../redux/actions';
+import { getUser } from "../../utils/api-client";
 
 function SearchContact(contact: UserType): ReactElement {
 
   const dispatch = useAppDispatch();
 
-  const handleFollowClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleFollowClick = async (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
+    console.log('IS this running??')
     dispatch(actions.toggleFollowed(contact._id.toString()));
+    const contactData = await getUser(contact._id.toString());
+    console.log('Dispatching contact albums: ', contactData.albums);
+    dispatch(actions.addContactAlbums(contactData.albums));
   }
 
   return (

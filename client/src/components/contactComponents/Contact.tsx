@@ -10,6 +10,7 @@ function Contact(contact: UserType): ReactElement {
   const handleFollowClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     dispatch(actions.toggleFollowed(contact._id.toString()));
+    dispatch(actions.removeContactAlbums(contact.userName))
   }
 
   return (

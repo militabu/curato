@@ -20,8 +20,8 @@ function ContactsScreen() : ReactElement {
   }
 
   return (
-    <>
-      <div className="group border-t w-full py-4 text-xl bg-customBlue flex flex-col items-center">
+    <div className="h-full w-full overflow-y-auto flex flex-col justify-start items-center bg-customBlue  sm:bg-customPurple sm:max-w-2xl sm:mt-4 sm:mb-10 sm:rounded-lg">
+      <div className="w-full text-xl py-4 flex flex-col items-center sm:px-10">
           <input
             className="peer w-10/12 py-2 pl-4 rounded-full"
             id="outlined-basic"
@@ -29,19 +29,19 @@ function ContactsScreen() : ReactElement {
             onChange={searchHandler}
             placeholder="Search Contacts..."
           />
-        <div className="w-full flex peer-placeholder-shown:hidden justify-center">
+        <div className="w-full flex peer-placeholder-shown:hidden justify-center sm:rounded-lg">
           <UserList { ...{ input: searchState } } />
         </div>
       </div>
-      <div className="bg-customTeal w-full pl-6 py-1 text-xl font-semibold">
+      <div className="bg-customTeal w-full pl-6 py-1 text-xl font-semibold sm:rounded-md">
         <h3>My Contacts</h3>
       </div>
-      <div className="h-full w-full pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customBlue">
+      <div className="h-full w-full pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customBlue sm:bg-customPurple">
         {userList
           .filter(user => myContacts.includes(user._id.toString()))
           .map(contact => <Contact key={contact._id.toString()} {...contact} />)}
       </div>
-    </>
+    </div>
   )
 }
 

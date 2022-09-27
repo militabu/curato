@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { AlbumType, UserType } from "../customTypes";
 import { postAlbum, updateUser } from '../utils/api-client';
+import { albumList } from './mocks';
 
 const screenReducer = (
     state = {screen: 0, viewAlbum: false, editAlbum: false, uploading: false, offline: false, activeAlbum: {} as AlbumType}, 
@@ -45,7 +46,7 @@ const screenReducer = (
 
 const initialAlbumState = [] as AlbumType[];
 
-const albumsReducer = (state = initialAlbumState, action: { type: string, payload?: number | string | AlbumType}) => {
+const albumsReducer = (state = initialAlbumState, action: { type: string, payload?: number | string | AlbumType | AlbumType[]}) => {
   switch(action.type) {
     case 'GET_ALBUMS':
       return action.payload;
@@ -83,6 +84,13 @@ const albumsReducer = (state = initialAlbumState, action: { type: string, payloa
         })
       ];
       return newAlbumList;
+    case 'ADD_CONTACT_ALBUMS':
+      console.log('Reducer trying to add contact albums: ', action.payload);
+      return [...state, ...action.payload as AlbumType[]]
+    case 'REMOVE_CONTACT_ALBUMS':
+      return [...state.filter(album => {
+        return (album.sharedWith.length === 0) || (album.sharedWith[0] !== action.payload);
+      })];
     default: return state;
   }
 }
@@ -99,7 +107,7 @@ const contactsReducer = (state = initialContactsState, action: { type: string, p
         // Find the current user, and add or delete the contact from the payload to their contact list.
         let newContacts: string[] = [];
         if (user._id.toString() === process.env.REACT_APP_USER) {
-          newContacts = user.contacts;
+          newContacts = [...user.contacts];
           const index = user.contacts.indexOf(contactId);
           if (index < 0) {
             newContacts.push(contactId);
@@ -113,7 +121,7 @@ const contactsReducer = (state = initialContactsState, action: { type: string, p
             ...user,
             contacts: newContacts
           }
-          : user;
+          : {...user};
           // Update the user on the DB
           if (user._id.toString() === process.env.REACT_APP_USER) {
             updateUser(updatedUser);

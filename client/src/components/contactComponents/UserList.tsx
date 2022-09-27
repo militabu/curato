@@ -8,7 +8,7 @@ function UserList(props: { input: string }) {
   const userList: UserType[] = useAppSelector(state => state.contactsReducer);
 
   return (
-    <div className="bg-white mt-4 w-full px-4 py-4">
+    <div className="bg-white mt-4 w-full px-4 py-4 sm:rounded-lg">
       <ul>
         {userList
           .filter((item) => item._id.toString() !== process.env.REACT_APP_USER)

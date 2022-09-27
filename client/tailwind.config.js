@@ -16,8 +16,10 @@ module.exports = {
         customBlue: '#859df2',
         customOrange: '#edc68c',
         customTeal: '#09e0c6',
-        customPink: '#bc768f',
+        customPink: '#bc768f', 
         customGreen: '#b2ef9b',
+        customBuff: '#f5dd90',
+        customYellow: '#ffee99'
       }
     },
   },
