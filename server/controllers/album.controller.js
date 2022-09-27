@@ -36,7 +36,7 @@ const postAlbum = async (ctx) => {
 const deleteAlbums = async (ctx) => {
   try {
     const userId = ctx.request.body.userId;
-    const user = await User.findOneAndUpdate({ _id: userId });
+    const user = await User.findOne({ _id: userId });
     user.albums = [];
     user.save();
     ctx.status = 204;

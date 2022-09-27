@@ -12,7 +12,7 @@ function UserList(props: { input: string }) {
       <ul>
         {userList
           .filter((item) => item._id.toString() !== process.env.REACT_APP_USER)
-          .filter((item) => item.userName.toLowerCase().includes(props.input))
+          .filter((item) => item.userName.toLowerCase().includes(props.input.toLowerCase()))
           .map((item) => {
           return (
             // <li key={item._id.toString()}>{item.userName}</li> 

@@ -36,3 +36,24 @@ export const albumList : AlbumType[] = [
     sharedWith: []
   },
 ]
+
+const mockUser = {
+  "userName": "Ben",
+  "userImg": "https://avatars.githubusercontent.com/u/102311146?v=4",
+  "contacts":["632a22090543901fa725a84c"],
+  "albums": []
+}
+const mockAlbum = {
+  "id":"",
+  "title": "Curato",
+  "date": Date.now(),
+  "description": "Do I get paid for this advertising?",
+  "favorite": false,
+  "coverImg": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/ae/da/ca/caption.jpg?w=2400&h=-1&s=1&cx=1920&cy=1079&chk=v1_9fb04f577ed31ea036b9",
+  "images": [
+    "https://res.cloudinary.com/doeffypwo/image/upload/v1664267416/benimg1_wqhzau.jpg",
+    "https://res.cloudinary.com/doeffypwo/image/upload/v1664267416/benimg3_xeb0yv.jpg",
+    "https://res.cloudinary.com/doeffypwo/image/upload/v1664267416/benimg2_wf7xdv.jpg"
+  ],
+  "sharedWith": []
+}

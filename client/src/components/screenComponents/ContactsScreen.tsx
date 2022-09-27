@@ -16,7 +16,7 @@ function ContactsScreen() : ReactElement {
   // Local state management for the search bar
   const [searchState, setSearchState] = useState("");
   const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchState(event.target.value.toLowerCase());
+    setSearchState(event.target.value);
   }
 
   return (

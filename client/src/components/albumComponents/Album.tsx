@@ -20,11 +20,12 @@ function Album(album: AlbumType): ReactElement {
 
   return (
     <div 
-      className="bg-white h-28 p-4 mx-4 mt-4 rounded-md flex justify-between z-0"
+      className={` h-28 p-4 mx-4 mt-4 rounded-md flex justify-between z-0 ${album.sharedWith.length > 0 ? 'bg-customGreen' : 'bg-white'}`}
       onClick={() => dispatch(actions.viewAlbum(album))}
     >
       <div className="flex flex-col justify-center items-start" >
         <h3 className="font-bold text-2xl">{album.title}</h3>
+        <h6>{album.sharedWith.length > 0 ? `Shared by ${album.sharedWith[0]}` : `Made by Me`}</h6>
         <h6>{formatDate(new Date(album.date))}</h6>
       </div>
       <div className="w-1/2 flex justify-end items-center">
