@@ -1,17 +1,13 @@
-import { ObjectId } from "mongodb";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 import { UserType } from "../../customTypes";
 import { useAppSelector } from "../../redux/hooks";
 import Contact from "../contactComponents/Contact";
-import TextField from '@mui/material/TextField';
 import UserList from "../contactComponents/UserList";
 
 function ContactsScreen() : ReactElement {
 
   const userList: UserType[] = useAppSelector(state => state.contactsReducer);
   const myContacts: string[] = userList.find(user => user._id.toString() === process.env.REACT_APP_USER)?.contacts ?? [];
-
-  // console.log('Contacts in the contacts screen: ', myContacts);
   
   // Local state management for the search bar
   const [searchState, setSearchState] = useState("");
@@ -39,7 +35,7 @@ function ContactsScreen() : ReactElement {
       <div className="h-full w-full pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customBlue sm:bg-customPurple">
         {userList
           .filter(user => myContacts.includes(user._id.toString()))
-          .map(contact => <Contact key={contact._id.toString()} {...contact} />)}
+          .map(contact => <Contact key={contact._id.toString()} contact={contact} text={'Unfollow'} />)}
       </div>
     </div>
   )

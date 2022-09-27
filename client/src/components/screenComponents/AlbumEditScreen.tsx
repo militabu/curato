@@ -210,7 +210,7 @@ function AlbumEditScreen(): ReactElement {
                     <label
                       id={`image${index}Box`}
                       htmlFor={`image${index}`}
-                      className="aspect-square flex items-center justify-center bg-white shadow-md"
+                      className="aspect-square flex items-center justify-center bg-white shadow-md cursor-pointer"
                     >
                       {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
                       { Object.keys(screenState.activeAlbum).length > 0 && screenState.activeAlbum.images[index]

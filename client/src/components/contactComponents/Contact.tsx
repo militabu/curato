@@ -3,7 +3,7 @@ import { UserType } from '../../customTypes';
 import { useAppDispatch } from "../../redux/hooks";
 import * as actions from '../../redux/actions';
 
-function Contact(contact: UserType): ReactElement {
+function Contact({ contact, text }: { contact: UserType, text: string }): ReactElement {
 
   const dispatch = useAppDispatch();
 
@@ -23,7 +23,7 @@ function Contact(contact: UserType): ReactElement {
       </div>
       <div className="w-1/4 mr-2 flex justify-end items-center">
           <button onClick={handleFollowClick} className="rounded-md bg-blue-600 text-white px-4 py-2 font-semibold">
-            Unfollow
+            {text}
           </button>
       </div>
     </div>

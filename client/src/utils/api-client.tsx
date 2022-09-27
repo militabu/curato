@@ -19,7 +19,7 @@ const getUser = async (userId: string) => {
 
 const updateUser = async (user: UserType) => {
   try {
-    const response = await fetch(`${baseUrl}/update-user`,
+    await fetch(`${baseUrl}/update-user`,
     {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},

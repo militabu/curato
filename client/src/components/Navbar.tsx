@@ -1,18 +1,34 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { ScreenState } from "../customTypes";
+import { ScreenState, UserType } from "../customTypes";
 import { editAlbum, changeScreen } from "../redux/actions";
+import Contact from "./contactComponents/Contact";
 
 function Navbar() : ReactElement {
 
   const screen: ScreenState = useAppSelector(state => state.screenReducer);
+  const userList: UserType[] = useAppSelector(state => state.contactsReducer);
+  const myContacts: string[] = userList.find(user => user._id.toString() === process.env.REACT_APP_USER)?.contacts ?? [];
+
+  const [share, setShare] = useState(false);
+  const [contactMenu, showContactMenu] = useState(false);
   const dispatch = useAppDispatch();
 
+  const shareHandler = () => {
+    showContactMenu(!contactMenu);
+  }
+
+  const buttonHandler = () => {
+    shareHandler();
+    setShare(!share);
+  }
+
   return (
+    <>
     <nav className="flex items-center justify-between pl-6 pr-3 py-3 z-50 bg-white sm:bg-customPurple sm:text-white sticky top-0 left-0 right-0">
       <h1 className="text-4xl sm:text-5xl font-header">Curato</h1>
       <div className="hidden sm:flex w-7/12 items-center justify-between text-2xl">
@@ -23,19 +39,28 @@ function Navbar() : ReactElement {
       </div>
       <div className="sm:hidden flex space-x-4">
         { screen.viewAlbum ? 
-          <IconButton color='inherit'>
-            <ShareIcon fontSize="large"/> 
+          <IconButton onClick={shareHandler} color='inherit'>
+            <ShareIcon fontSize="large" style={{ color: share ? '#0d6efd' : '#000' }} /> 
           </IconButton> : <></>}
 
         <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}}color='inherit'>
           { screen.viewAlbum 
-            ? <EditIcon fontSize="large"/> 
+            ? <EditIcon fontSize="large" /> 
             : <SettingsIcon fontSize="large"/> 
           }
         </IconButton>
-
       </div>
     </nav>
+    <div className={`${contactMenu ? 'flex' : 'hidden'} flex-col justify-center items-center`}>
+        <button className="bg-customTeal font-semibold rounded-md w-40 px-4 py-1 my-2 float-right" onClick={shareHandler}>
+            Public Share
+        </button>
+        {userList
+          .filter(user => myContacts.includes(user._id.toString()))
+          .map(contact => <Contact key={contact._id.toString()} contact={contact} text={'Share'} />)
+        }
+    </div>
+    </>
   )
 }
 

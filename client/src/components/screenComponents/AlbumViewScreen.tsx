@@ -11,14 +11,10 @@ import Modal from "../albumComponents/ImageModal";
 
 function AlbumViewScreen() : ReactElement {
 
-  // TODO: The screenstate doesn't update when we change the albums, as
-  // the activeAlbum is loaded at render time. Should we change activeAlbum to be an ID?
-  // Feels a bit late for that... maybe just add an ActiveAlbum update to the reducer for the albums!
   const screenState: ScreenState = useAppSelector(state => state.screenReducer);
   const dispatch = useAppDispatch();
 
   const [modalData, setModalData] = useState({ imgSrc:"", modal:false });
-
   const toggleModal = (imgSrc: string) => {
     setModalData( { imgSrc, modal: !modalData.modal });
   }
@@ -53,7 +49,7 @@ function AlbumViewScreen() : ReactElement {
           { screenState.activeAlbum.images.map((image, index) => {
               return (
               <div key={index} onClick={() => toggleModal(image)} className="border-2 border-solid aspect-square flex items-center justify-center">
-                <img className="object-cover w-full h-full" src={image}/>
+                <img className="object-cover w-full h-full" src={image} alt='Modal popup'/>
               </div>
               );
             })
