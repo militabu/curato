@@ -15,7 +15,7 @@ function Modal({imgSrc, callback}: ModalProps) : ReactElement {
           <button className="bg-customTeal rounded-md px-4 py-1 my-2 float-right" onClick={callback}>
             CLOSE
           </button>
-          <img src={imgSrc} alt='Modal popup image'/>
+          <img src={imgSrc} alt='Modal popup'/>
         </div>
       </div>
     </div>
@@ -23,14 +23,3 @@ function Modal({imgSrc, callback}: ModalProps) : ReactElement {
 }
 
 export default Modal;
-
-{/* <div className="modal">
-<div className="overlay" onClick={callback}>
-  <div className="modal-content">
-    <img src={imgSrc} alt='Modal popup image'/>
-    <button className="close-modal" onClick={callback}>
-      CLOSE
-    </button>
-  </div>
-</div>
-</div> */}

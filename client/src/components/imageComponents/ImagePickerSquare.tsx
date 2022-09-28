@@ -2,7 +2,7 @@ import React, { ReactElement } from "react";
 import { AlbumType } from "../../customTypes";
 import AddIcon from "@mui/icons-material/Add";
 
-function ImagePickerSquare (index: number, album: AlbumType, callback: (event: React.FormEvent<HTMLInputElement>) => void) : ReactElement {
+function ImagePickerSquare ({ index, album, callback } : { index: number, album: AlbumType, callback: (event: React.FormEvent<HTMLInputElement>) => void }) : ReactElement {
 
   return (
     <div key={index}>
@@ -12,7 +12,8 @@ function ImagePickerSquare (index: number, album: AlbumType, callback: (event: R
         className="aspect-square flex items-center justify-center bg-white shadow-md"
       >
         {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
-        { Object.keys(album).length > 0 && album.images[index]
+        {
+          Object.keys(album).length > 0 && album.images[index]
           ? <img className="h-full w-full object-cover" src={album.images[index]}></img> 
           : <AddIcon style={{ fontSize: "3rem" }} /> 
         }

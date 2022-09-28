@@ -1,13 +1,13 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import { AlbumType, ScreenState } from "../../customTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { addAlbum, toggleAlbumEdit, setUploading, updateAlbum, updateActive } from "../../redux/actions";
 import axios, { AxiosResponse } from 'axios';
 import { toBase64 } from "../../utils/utils";
 import { postAlbum } from "../../utils/api-client";
+import ImagePickerSquare from "../imageComponents/ImagePickerSquare";
 
 function AlbumEditScreen(): ReactElement {
   
@@ -50,20 +50,15 @@ function AlbumEditScreen(): ReactElement {
     // 1. Upload the files to get the image URLs for the Album
     // TODO: The app pauses while this runs, would be great to add a progress bar...
     const newAlbum: AlbumType = await uploadSelectedImages() ?? {} as AlbumType;
-    console.log('The newAlbum we\'re trying to submit is: ', newAlbum);
     newAlbum['coverImg'] = newAlbum.images[0];
     setFormState(newAlbum);
 
     // 2. Add this album to MongoDB so that we can get the MongoDB ID to complete the Album object
     // const newAlbum: AlbumType = { ...formState, coverImg: formState.images[0] };
-    console.log('Trying to post the following album to the server: ', formState);
-    console.log('ENV var for the username: ', process.env.REACT_APP_USER);
     const albumID = await postAlbum(process.env.REACT_APP_USER, newAlbum);
-    console.log(`The ID for the ${formState.id ? 'updated' : 'new'} album is : `, albumID);
    
     // 3. Add the new Album to the AlbumList state in Redux
     // Set the id for the album if it was just created in Mongo DB, otherwise we can update the album List and active album.
-    console.log('Before setting the id, the current ID of the album is: ', newAlbum.id);
     if (!newAlbum.id) {
       newAlbum.id = String(albumID);
       dispatch(addAlbum(newAlbum));
@@ -71,7 +66,6 @@ function AlbumEditScreen(): ReactElement {
       dispatch(updateAlbum(newAlbum));
       dispatch(updateActive(newAlbum));
     }
-    console.log('After setting the ID: ', newAlbum);
 
     // Remove the editAlbum flag to hide the editing screen
     dispatch(toggleAlbumEdit());
@@ -92,7 +86,6 @@ function AlbumEditScreen(): ReactElement {
           const { file, index } = imageList[i];
           // No need to upload the file if it is already on the server
           if (stateCopy.images.length <= index || stateCopy.images[index].substring(0,27) !== 'https://res.cloudinary.com') {
-            console.log('Trying to upload image: ', imageList[i]);
             // Convert image to base 64 string for uploading
             await toBase64(file)
             // Upload to Cloudinary
@@ -104,7 +97,6 @@ function AlbumEditScreen(): ReactElement {
                 }
             )).then(
               (res) => {
-                console.log(`New URL for the album image: ${res.data.url}`);
                 // Add the returned URL to the image list for this album.
                 checkUploadStatus(res)
                 stateCopy.images[index] = res.data.url;
@@ -135,7 +127,6 @@ function AlbumEditScreen(): ReactElement {
   const handleImage = (event: React.FormEvent<HTMLInputElement>) => {
 
     const imageId = event.currentTarget.id;
-    console.log(`Target label div ID: ${imageId}Box`);
     const preview = document.querySelector(`#${imageId}Box`);
 
     // Remove the big plus icon from the label div
@@ -144,7 +135,6 @@ function AlbumEditScreen(): ReactElement {
     }
 
     const currFiles = event.currentTarget.files;
-    console.log('Files found: ', currFiles);
 
     // Check whether a list of images has been found
     if (currFiles && currFiles?.length > 0) {
@@ -184,7 +174,7 @@ function AlbumEditScreen(): ReactElement {
           </IconButton>
           <h1 className="text-2xl">{ formState.id !== "" ? 'Edit' : 'New'} Album</h1>
         </div>
-        <button 
+        <button
           type="submit"
           form="imageForm"
           className="text-xl mr-3 px-8 py-2 rounded-md bg-customTeal font-semibold"
@@ -202,35 +192,13 @@ function AlbumEditScreen(): ReactElement {
       <div className="h-full w-full px-4 pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customGreen">
         <div className="w-full">
           <div className="grid grid-cols-2 gap-4">
-
             {/* Always show 6 boxes in the grid, either with plus signs or the existing images. */}
-            {[0, 1, 2, 3, 4, 5].map((element, index) => {
+            {[0, 1, 2, 3, 4, 5].map((_, index) => {
                 return(
-                  <div key={index}>
-                    <label
-                      id={`image${index}Box`}
-                      htmlFor={`image${index}`}
-                      className="aspect-square flex items-center justify-center bg-white shadow-md cursor-pointer"
-                    >
-                      {/* The fallback value for activeAlbum is an empty object, so we have to check for any keys before trying to access the images */}
-                      { Object.keys(screenState.activeAlbum).length > 0 && screenState.activeAlbum.images[index]
-                        ? <img className="h-full w-full object-cover" src={screenState.activeAlbum.images[index]}></img> 
-                        : <AddIcon style={{ fontSize: "3rem" }} /> 
-                      }
-                    </label>
-                    <input
-                      id={`image${index}`}
-                      className="hidden"
-                      type="file"
-                      name="image1"
-                      accept="image/x-png,image/jpeg,image/gif"
-                      onChange={handleImage}
-                    ></input>
-                  </div>
-                )
-              }
-            )
-          }
+                  <ImagePickerSquare index={index} album={screenState.activeAlbum} callback={handleImage} />
+                )}
+              )
+            }
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import { ReactElement, useState } from "react";
 import SettingsIcon from '@mui/icons-material/Settings';
 import EditIcon from '@mui/icons-material/Edit';
 import ShareIcon from '@mui/icons-material/Share';
@@ -38,12 +38,12 @@ function Navbar() : ReactElement {
         <a href="#">Settings</a>
       </div>
       <div className="sm:hidden flex space-x-4">
-        { screen.viewAlbum ? 
+        { screen.viewAlbum ?
           <IconButton onClick={shareHandler} color='inherit'>
             <ShareIcon fontSize="large" style={{ color: share ? '#0d6efd' : '#000' }} /> 
           </IconButton> : <></>}
 
-        <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}}color='inherit'>
+        <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}} color='inherit'>
           { screen.viewAlbum 
             ? <EditIcon fontSize="large" /> 
             : <SettingsIcon fontSize="large"/> 
@@ -57,7 +57,7 @@ function Navbar() : ReactElement {
         </button>
         {userList
           .filter(user => myContacts.includes(user._id.toString()))
-          .map(contact => <Contact key={contact._id.toString()} contact={contact} text={'Share'} />)
+          .map(contact => <Contact key={contact._id.toString()} callback={buttonHandler} contact={contact} text={'Share'} />)
         }
     </div>
     </>

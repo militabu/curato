@@ -1,11 +1,23 @@
 import { UserType } from "../../customTypes";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getUser } from "../../utils/api-client";
 import Contact from "./Contact";
-import SearchContact from "./SearchContact";
+import * as actions from '../../redux/actions';
 
 function UserList(props: { input: string }) {
 
   const userList: UserType[] = useAppSelector(state => state.contactsReducer);
+
+
+  const dispatch = useAppDispatch();
+
+  const handleFollowClick = async (contact: UserType) => {
+    console.log('IS this running??')
+    dispatch(actions.toggleFollowed(contact._id.toString()));
+    const contactData = await getUser(contact._id.toString());
+    console.log('Dispatching contact albums: ', contactData.albums);
+    dispatch(actions.addContactAlbums(contactData.albums));
+  }
 
   return (
     <div className="bg-white mt-4 w-full px-4 py-4 sm:rounded-lg">
@@ -16,7 +28,7 @@ function UserList(props: { input: string }) {
           .map((item) => {
           return (
             // <li key={item._id.toString()}>{item.userName}</li> 
-            <SearchContact key={item._id.toString()} {...item} />
+            <Contact key={item._id.toString()} contact={item} text={'Follow'} callback={() => handleFollowClick(item)} />
           )
         })
         }

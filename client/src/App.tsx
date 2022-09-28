@@ -4,7 +4,7 @@ import FooterMenu from './components/FooterMenu';
 import MainScreen from './components/MainScreen';
 import Navbar from './components/Navbar';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { ScreenState, UserType, AlbumType } from "./customTypes";
+import { ScreenState, AlbumType } from "./customTypes";
 import { getUser, getAllUsers } from './utils/api-client';
 import { getAlbums, getUsers } from './redux/actions';
 
@@ -14,7 +14,6 @@ function App() {
   const screenState: ScreenState = useAppSelector(state => state.screenReducer)
 
   const dispatch = useAppDispatch();
-  let myContacts: string[]; 
 
   useEffect(() => {
     const userId = process.env.REACT_APP_USER
@@ -24,7 +23,7 @@ function App() {
     getUser(userId)
       .then((res) => {
         // Create a local list of contacts for sourcing shared albums
-        myContacts = res.contacts;
+        // const myContacts = res.contacts;
         // A bit awkward, but we need to replace the '_id' property from Mongo 
         // with the 'id' property expected by the AlbumType
         for (let album of res.albums) {
@@ -53,7 +52,7 @@ function App() {
   // To get any albums shared with us by our contacts, we can cycle through contacts and pull the user information for each.
   async function getSharedAlbums(contactList: string[]) {
     let sharedAlbums: AlbumType[] = []
-    console.log('Searching through contact list: ', myContacts);
+    console.log('Searching through contact list: ', contactList);
     for (const contact of contactList) {
       console.log('searching for user:', contact);
       await getUser(contact)

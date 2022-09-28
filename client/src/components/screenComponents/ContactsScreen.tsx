@@ -1,18 +1,25 @@
 import { ReactElement, useState } from "react";
 import { UserType } from "../../customTypes";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Contact from "../contactComponents/Contact";
 import UserList from "../contactComponents/UserList";
+import { toggleFollowed, removeContactAlbums } from '../../redux/actions';
 
 function ContactsScreen() : ReactElement {
 
   const userList: UserType[] = useAppSelector(state => state.contactsReducer);
   const myContacts: string[] = userList.find(user => user._id.toString() === process.env.REACT_APP_USER)?.contacts ?? [];
-  
+  const dispatch = useAppDispatch();
+
   // Local state management for the search bar
   const [searchState, setSearchState] = useState("");
   const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchState(event.target.value);
+  }
+
+  const handleUnfollowClick = (contact: UserType) => {
+    dispatch(toggleFollowed(contact._id.toString()));
+    dispatch(removeContactAlbums(contact.userName))
   }
 
   return (
@@ -35,7 +42,7 @@ function ContactsScreen() : ReactElement {
       <div className="h-full w-full pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customBlue sm:bg-customPurple">
         {userList
           .filter(user => myContacts.includes(user._id.toString()))
-          .map(contact => <Contact key={contact._id.toString()} contact={contact} text={'Unfollow'} />)}
+          .map(contact => <Contact key={contact._id.toString()} contact={contact} text={'Unfollow'} callback={() => handleUnfollowClick(contact)} />)}
       </div>
     </div>
   )
