@@ -1,4 +1,4 @@
-const mongoose = require('../db');
+import mongoose from '../db';
 
 const albumSchema = new mongoose.Schema({
   title: String, 
@@ -9,7 +9,7 @@ const albumSchema = new mongoose.Schema({
   sharedWith: [String],
   images: {type: [String], default: []}
 })
-const Album = mongoose.model('Album', albumSchema);
+export const Album = mongoose.model('Album', albumSchema);
 
 const userSchema = new mongoose.Schema({
   userName: String,
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   friendsAlbums: [{ userId: String, albumId: String }],
   albums: { type: [albumSchema], default: [] }
 });
-const User = mongoose.model('User', userSchema);
+export const User = mongoose.model('User', userSchema);
 
-module.exports = { User, Album };
+
 

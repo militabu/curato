@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const DBPATH = 'mongodb://localhost:27017/curato';
 
@@ -8,5 +8,5 @@ async function main () {
 
 main().catch(err => console.log(err));
 
-module.exports = mongoose;
+export default mongoose;
 

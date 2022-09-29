@@ -1,8 +1,8 @@
-const Router = require('koa-router');
-const { getUser, getAllUsers, postUserList, deleteUser, postUser, deleteContacts } = require('./controllers/user.controller');
-const { postAlbum, deleteAlbums } = require('./controllers/album.controller');
+import Router from 'koa-router';
+import { getUser, getAllUsers, postUserList, deleteUser, postUser, deleteContacts } from './controllers/user.controller';
+import { postAlbum, deleteAlbums, getSharedAlbums } from './controllers/album.controller';
 
-const router = Router();
+export const router = new Router();
 
 router.post('/user', (ctx) => getUser(ctx));
 router.post('/new-user', (ctx) => postUser(ctx));
@@ -20,4 +20,3 @@ router.post('/albums', (ctx) => postAlbum(ctx));
 
 router.get('/delete', (ctx) => deleteAlbums(ctx));
 
-module.exports = router;

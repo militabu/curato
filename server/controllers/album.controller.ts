@@ -1,6 +1,6 @@
-const { User, Album } = require("../models/schema");
+import { User, Album } from "../models/schema";
 
-const postAlbum = async (ctx) => {
+export const postAlbum = async (ctx) => {
   try {
     const userId = ctx.request.body.userId;
     const album = ctx.request.body.album;
@@ -12,20 +12,20 @@ const postAlbum = async (ctx) => {
     if (album.id === '') {
       const user = await User.findOne({ _id: userId });
       const newAlbum = new Album(album);
-      user.albums.push(newAlbum);
-      user.save();
+      user?.albums.push(newAlbum);
+      user?.save();
       ctx.body=newAlbum._id;
       ctx.status=201;
     } else {      
       const user = await User.findOne({ "_id": userId });
-      user.albums.forEach((el, index) => {
+      user?.albums.forEach((el, index) => {
           if (album.id = el._id) {
             user.albums[index] = { ...album, _id: album.id }
           }
           console.log("Searching for existing album, found: ", user.albums[index]);
         }
       )
-      user.save();
+      user?.save();
       ctx.status = 200;
     }
   } catch (err) {
@@ -33,12 +33,12 @@ const postAlbum = async (ctx) => {
   }
 };
 
-const deleteAlbums = async (ctx) => {
+export const deleteAlbums = async (ctx) => {
   try {
     const userId = ctx.request.body.userId;
     const user = await User.findOne({ _id: userId });
-    user.albums = [];
-    user.save();
+    user?.albums = [];
+    user?.save();
     ctx.status = 204;
     console.log(`User ${userId} albums removed`);
   } catch (err) {
@@ -46,4 +46,5 @@ const deleteAlbums = async (ctx) => {
   }
 }
 
-module.exports = { postAlbum, deleteAlbums };
+// to check with author if this is needed
+export const getSharedAlbums = (ctx) => {}

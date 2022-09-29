@@ -1,7 +1,7 @@
-const { User } = require("../models/schema");
-const { ObjectId } = require('mongodb');
+import { User }  from "../models/schema";
+import { ObjectId } from 'mongodb';
 
-const getUser = async (ctx) => {
+export const getUser = async (ctx) => {
   try {
     const id = ctx.request.body.id;
     console.log('Getting user: ', id);
@@ -14,7 +14,7 @@ const getUser = async (ctx) => {
   }
 };
 
-const postUser = (ctx) => {
+export const postUser = (ctx) => {
   try {
     const user = ctx.request.body;
     console.log("Creating new user:", user);
@@ -28,7 +28,7 @@ const postUser = (ctx) => {
   }
 };
 
-const getAllUsers = async (ctx) => {
+export const getAllUsers = async (ctx) => {
   try {
     const userList = await User.find();
     ctx.body = userList.map((user) => {
@@ -45,32 +45,39 @@ const getAllUsers = async (ctx) => {
   }
 };
 
-const postUserList = async (ctx) => {
+export const postUserList = async (ctx) => {
   try {
     const newUser = ctx.request.body;
     const user = await User.findOne({ _id:newUser._id });
-    user['contacts'] = newUser.contacts;
-    user.save();
+    // add this condition to prevent user === undefined
+    if(user) {
+      user['contacts'] = newUser.contacts;
+      user?.save();
+    }
     ctx.status = 201;
   } catch (err) {
     console.log('Error in the server postUserList: ', err);
   }
 }
 
-const deleteContacts = async (ctx) => {
+export const deleteContacts = async (ctx) => {
   try {
     const userId = ctx.request.body.id;
+    // what is ObjectId? 
     const user = await User.findOne({ '_id': ObjectId(userId) });
-    user.contacts = [];
-    console.log('Found the following user: ', user);
-    user.save();
+    // add this condition to prevent user === undefined
+    if(user) {
+      user.contacts = [];
+      console.log('Found the following user: ', user);
+      user.save();
+    }
     ctx.status = 204;
   } catch (err) {
     console.log('Error in the server deleteContacts: ', err);
   }
 }
 
-const deleteUser = (ctx) => {
+export const deleteUser = (ctx) => {
   try {
     const userId = ctx.request.body.id;
     console.log('User ID to delete is: ', userId);
@@ -86,5 +93,3 @@ const deleteUser = (ctx) => {
     console.log('Error in the server deleteUser: ', err);
   }
 }
-
-module.exports = { getUser, postUser, postUserList, getAllUsers, deleteUser, deleteContacts };
