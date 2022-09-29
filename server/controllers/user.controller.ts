@@ -1,6 +1,8 @@
 import { User }  from "../models/schema";
 import { ObjectId } from 'mongodb';
 import { Context } from "koa";
+import { Document, Error } from "mongoose";
+import { IUserType } from '../types/UserType';
 
 export const getUser = async (ctx:Context) => {
   try {
@@ -48,14 +50,18 @@ export const getAllUsers = async (ctx:Context) => {
 
 export const postUserList = async (ctx:Context) => {
   try {
-    const newUser:typeof User = ctx.request.body;
-    const user = await User.findOne({ _id:newUser._id });
-    // add this condition to prevent user === undefined
-    if(user) {
-      user['contacts'] = newUser.contacts;
-      user?.save();
+    const newUser = ctx.request.body;
+    if(newUser) {
+      const user = await User.findOne({ _id:newUser!._id });
+      // add this condition to prevent user === undefined
+      if(user) {
+        user['contacts'] = newUser.contacts as string[];
+        user?.save();
+      }
+      ctx.status = 201;
     }
-    ctx.status = 201;
+    
+    
   } catch (err) {
     console.log('Error in the server postUserList: ', err);
   }
@@ -82,7 +88,7 @@ export const deleteUser = (ctx:Context) => {
   try {
     const userId:string = ctx.request.body?.id as string;
     console.log('User ID to delete is: ', userId);
-    User.findOneAndDelete({ "_id": new ObjectId(userId) }, function(err, docs) {
+    User.findOneAndDelete({ "_id": new ObjectId(userId) }, function(err:Error, docs:Document) {
       if (err) {
         console.log('Error in delete: ', err);
       } else {

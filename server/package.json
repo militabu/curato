@@ -24,6 +24,7 @@
     "@types/koa-bodyparser": "^4.3.8",
     "@types/koa-router": "^7.4.4",
     "@types/mongodb": "^4.0.7",
+    "@types/mongoose": "^5.11.97",
     "nodemon": "^2.0.20"
   }
 }
