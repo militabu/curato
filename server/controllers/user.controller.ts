@@ -1,9 +1,10 @@
 import { User }  from "../models/schema";
 import { ObjectId } from 'mongodb';
+import { Context } from "koa";
 
-export const getUser = async (ctx) => {
+export const getUser = async (ctx:Context) => {
   try {
-    const id = ctx.request.body.id;
+    const id = ctx.request.body?.id;
     console.log('Getting user: ', id);
     let user = await User.findOne({ _id: id });
     ctx.body = user;
@@ -14,7 +15,7 @@ export const getUser = async (ctx) => {
   }
 };
 
-export const postUser = (ctx) => {
+export const postUser = (ctx:Context) => {
   try {
     const user = ctx.request.body;
     console.log("Creating new user:", user);
@@ -28,7 +29,7 @@ export const postUser = (ctx) => {
   }
 };
 
-export const getAllUsers = async (ctx) => {
+export const getAllUsers = async (ctx:Context) => {
   try {
     const userList = await User.find();
     ctx.body = userList.map((user) => {
@@ -45,9 +46,9 @@ export const getAllUsers = async (ctx) => {
   }
 };
 
-export const postUserList = async (ctx) => {
+export const postUserList = async (ctx:Context) => {
   try {
-    const newUser = ctx.request.body;
+    const newUser:typeof User = ctx.request.body;
     const user = await User.findOne({ _id:newUser._id });
     // add this condition to prevent user === undefined
     if(user) {
@@ -60,11 +61,11 @@ export const postUserList = async (ctx) => {
   }
 }
 
-export const deleteContacts = async (ctx) => {
+export const deleteContacts = async (ctx:Context) => {
   try {
-    const userId = ctx.request.body.id;
+    const userId:string = ctx.request.body?.id as string;
     // what is ObjectId? 
-    const user = await User.findOne({ '_id': ObjectId(userId) });
+    const user = await User.findOne({ '_id': new ObjectId(userId) });
     // add this condition to prevent user === undefined
     if(user) {
       user.contacts = [];
@@ -77,11 +78,11 @@ export const deleteContacts = async (ctx) => {
   }
 }
 
-export const deleteUser = (ctx) => {
+export const deleteUser = (ctx:Context) => {
   try {
-    const userId = ctx.request.body.id;
+    const userId:string = ctx.request.body?.id as string;
     console.log('User ID to delete is: ', userId);
-    User.findOneAndDelete({ "_id": ObjectId(userId) }, function(err, docs) {
+    User.findOneAndDelete({ "_id": new ObjectId(userId) }, function(err, docs) {
       if (err) {
         console.log('Error in delete: ', err);
       } else {
