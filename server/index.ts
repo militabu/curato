@@ -6,7 +6,7 @@ import { router } from './router'
 const HOSTNAME = 'localhost';
 const PORT = 3210;
 
-const app = new Koa();
+export const app = new Koa();
 
 app.use(cors());
 app.use(bodyParser());

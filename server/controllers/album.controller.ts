@@ -2,22 +2,19 @@ import { User, Album } from "../models/schema";
 import { Context } from "koa";
 import { IAlbumType } from '../types/AlbumType';
 
-interface PostAlbumContextType {
-  userId:string, 
-  album: IAlbumType
-}
-
 export const postAlbum = async (ctx: Context) => {
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
-
+    if (!userId || !album) {
+      throw new Error('Missing user input.')
+    }
     // console.log("The album received is: ", album);
 
     // Either create the album on the user or update it if it already exists.
     // Existing albums will have a populated MongoDB ID.
-
     if (!album?.id) {
+      // if album id is not available
       const user = await User.findOne({ _id: userId });
       const newAlbum = new Album(album);
       if(user) {
@@ -46,6 +43,7 @@ export const postAlbum = async (ctx: Context) => {
     }
   } catch (err) {
     console.log("Error in server postAlbum: ", err);
+    ctx.status = 400;
   }
 };
 
@@ -64,8 +62,11 @@ export const deleteAlbums = async (ctx:Context) => {
     console.log(`User ${userId} albums removed`);
   } catch (err) {
     console.log("Error in the server deleteAlbum: ", err);
+    ctx.status = 500;
   }
 }
 
-// to check with author if this is needed
-export const getSharedAlbums = (ctx:Context) => {}
+// not implemented by author
+export const getSharedAlbums = (ctx:Context) => {
+  // logic to get shared albums 
+}

@@ -2,15 +2,18 @@ import { User }  from "../models/schema";
 import { ObjectId } from 'mongodb';
 import { Context } from "koa";
 import { Document, Error } from "mongoose";
-import { IUserType } from '../types/UserType';
 
 export const getUser = async (ctx:Context) => {
   try {
     const id = ctx.request.body?.id;
-    console.log('Getting user: ', id);
-    let user = await User.findOne({ _id: id });
-    ctx.body = user;
-    ctx.status = 200;
+    if(id) {
+      console.log('Getting user: ', id);
+      let user = await User.findOne({ _id: id });
+      ctx.body = user;
+      ctx.status = 200;
+    } else {
+      throw new Error('User id is not provided.')
+    }
   } catch (err) {
     console.log("ERROR: ", err);
     ctx.status = 400;
@@ -20,11 +23,15 @@ export const getUser = async (ctx:Context) => {
 export const postUser = (ctx:Context) => {
   try {
     const user = ctx.request.body;
-    console.log("Creating new user:", user);
-    const newUser = new User(user);
-    newUser.save();
-    console.log("Inserted _id is ", newUser._id.toString());
-    ctx.status = 201;
+    if(user) {
+      console.log("Creating new user:", user);
+      const newUser = new User(user);
+      newUser.save();
+      console.log("Inserted _id is ", newUser._id.toString());
+      ctx.status = 201;
+    } else {
+      throw new Error('User data is not provided')
+    }
   } catch (err) {
     console.log("ERROR: ", err);
     ctx.status = 400;
@@ -34,17 +41,22 @@ export const postUser = (ctx:Context) => {
 export const getAllUsers = async (ctx:Context) => {
   try {
     const userList = await User.find();
-    ctx.body = userList.map((user) => {
-      return {
-        _id: user._id,
-        userName: user.userName,
-        userImg: user.userImg,
-        contacts: user.contacts,
-      };
-    });
-    ctx.status = 200;
+    if(userList) {
+      ctx.body = userList.map((user) => {
+        return {
+          _id: user._id,
+          userName: user.userName,
+          userImg: user.userImg,
+          contacts: user.contacts,
+        };
+      });
+      ctx.status = 200;
+    } else {
+      throw new Error('user list not found')
+    }
   } catch (err) {
     console.log("Error in the server getAllUsers: ", err);
+    ctx.status = 400;
   }
 };
 
@@ -52,18 +64,19 @@ export const postUserList = async (ctx:Context) => {
   try {
     const newUser = ctx.request.body;
     if(newUser) {
-      const user = await User.findOne({ _id:newUser!._id });
+      const user = await User.findOne({ _id:newUser._id });
       // add this condition to prevent user === undefined
       if(user) {
         user['contacts'] = newUser.contacts as string[];
-        user?.save();
+        user.save();
       }
       ctx.status = 201;
+    } else {
+      throw new Error('User id is not provided')
     }
-    
-    
   } catch (err) {
     console.log('Error in the server postUserList: ', err);
+    ctx.status = 400;
   }
 }
 
@@ -81,6 +94,7 @@ export const deleteContacts = async (ctx:Context) => {
     ctx.status = 204;
   } catch (err) {
     console.log('Error in the server deleteContacts: ', err);
+    ctx.status = 500;
   }
 }
 
@@ -98,5 +112,6 @@ export const deleteUser = (ctx:Context) => {
     ctx.status = 204;
   } catch (err) {
     console.log('Error in the server deleteUser: ', err);
+    ctx.status = 500;
   }
 }
