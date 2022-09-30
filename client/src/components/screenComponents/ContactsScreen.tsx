@@ -3,7 +3,7 @@ import { UserType } from "../../customTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import Contact from "../contactComponents/Contact";
 import UserList from "../contactComponents/UserList";
-import { toggleFollowed, removeContactAlbums } from '../../redux/actions';
+import { toggleFollowed, removeContactAlbums } from '../actions';
 
 function ContactsScreen() : ReactElement {
 

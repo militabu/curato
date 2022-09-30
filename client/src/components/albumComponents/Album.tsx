@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useAppDispatch } from "../../redux/hooks";
-import * as actions from '../../redux/actions';
+import * as actions from '../actions';
 import { formatDate } from '../../utils/utils'
 
 function Album(album: AlbumType): ReactElement {
