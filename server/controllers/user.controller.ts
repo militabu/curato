@@ -9,7 +9,7 @@ export const getUser = async (ctx:Context) => {
     if(!id) throw new Error('User id is not provided')
 
     console.log('Getting user: ', id);
-    let user = await User.findOne({ _id: id });
+    let user = await User.findOne({ _id: new ObjectId(id.toString()) });
     // add this condition to prevent user === undefined
     if(!user || Object.keys(user).length === 0 ) throw new Error('User data is not provided')
 
@@ -112,8 +112,9 @@ export const deleteUser = (ctx:Context) => {
     if(!userId) throw new Error('No user id provided')
     console.log('User ID to delete is: ', userId);
     User.findOneAndDelete({ "_id": new ObjectId(userId.toString()) }, function(err:Error, docs:Document) {
-      if (err) {
+      if (err || !docs) {
         console.log('Error in delete: ', err);
+        ctx.status = 500
       } else {
         console.log('Deleted user: ', docs);
       }

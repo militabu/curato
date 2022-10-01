@@ -49,7 +49,7 @@ describe('GET /userlist endpoint with no corresponding userId', () => {
     })
 })
 
-// test postUser function with user details
+// test postUser and getAllUser functions with user details
 describe('POST /new-user endpoint with user details', () => {
     it('POST /new-user should return the user details with a success response', async() => {
         const response = await request(app.callback())
@@ -66,6 +66,9 @@ describe('POST /new-user endpoint with user details', () => {
               albumId: "album111111"    
             }
           ])
+        // test getAllUser function
+        const getAllUserResponse = await request(app.callback()).get('/userlist');
+        expect(getAllUserResponse.statusCode).toBe(200);
     })
 })
 
@@ -80,7 +83,7 @@ describe('POST /new-user endpoint without user details', () => {
     })
 })
 
-// test getUser function
+// test postUser and getUser functions
 describe('POST /user returns the same user details after POST /new-user', () => {
     it('POST /user should return a success response', async() => {
         const response = await request(app.callback())
@@ -119,7 +122,7 @@ describe('POST /user without passing user details', () => {
     })
 })
 
-// test postUserList function 
+// test postUserList function with user details
 describe('POST /update-user returns the edited user details', () => { 
     it('POST /update-user should return a success response with the edited details', async() => {
         const response = await request(app.callback())
@@ -140,6 +143,7 @@ describe('POST /update-user returns the edited user details', () => {
     })
 })
 
+// test postUserList function without user details
 describe('POST /update-user without user details', () => { 
     it('POST /update-user without sending user details should return a 400 error', async() => {
         const response = await request(app.callback())
@@ -157,6 +161,7 @@ describe('POST /update-user without user details', () => {
     })
 })
 
+// test deleteUser function
 describe('DELETE /delete-user returns success', () => { 
     it('DELETE /delete-user successfully should return a success status', async() => {
         // add user to the database
@@ -179,5 +184,16 @@ describe('DELETE /delete-user returns success', () => {
             .send(mockUser)
             .set('Accept','application/json')
         expect(statusCode).toBe(400);
+    })
+})
+
+describe('DELETE /delete-user without user details', () => { 
+    it('DELETE /delete-user should return 500 error without user details', async() => {
+        // delete user
+        const deleteRes = await request(app.callback())
+            .delete('/delete-user')
+            .send(null)
+            .set('Accept','application/json')
+        expect(deleteRes.statusCode).toBe(500);
     })
 })
