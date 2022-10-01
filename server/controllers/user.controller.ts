@@ -10,6 +10,9 @@ export const getUser = async (ctx:Context) => {
 
     console.log('Getting user: ', id);
     let user = await User.findOne({ _id: id });
+    // add this condition to prevent user === undefined
+    if(!user || Object.keys(user).length === 0 ) throw new Error('User data is not provided')
+
     ctx.body = user;
     ctx.status = 200;
 
@@ -26,7 +29,6 @@ export const postUser = (ctx:Context) => {
     if(!user || Object.keys(user).length === 0 ) throw new Error('User data is not provided')
 
     const newUser = new User(user);
-
     newUser.save();
     console.log("Inserted _id is ", newUser._id.toString());
     ctx.body = newUser;
@@ -41,6 +43,9 @@ export const postUser = (ctx:Context) => {
 export const getAllUsers = async (ctx:Context) => {
   try {
     const userList = await User.find();
+    // add this condition to prevent user === undefined
+    if(!userList || Object.keys(userList).length === 0 ) throw new Error('User data is not provided')
+
     if(userList) {
       ctx.body = userList.map((user) => {
         return {
@@ -64,13 +69,14 @@ export const postUserList = async (ctx:Context) => {
   try {
     const newUser = ctx.request.body;
     if(!newUser || Object.keys(newUser).length === 0) throw new Error('User id is not provided')
-
+    
     const user = await User.findOne({ _id:newUser._id });
     // add this condition to prevent user === undefined
-    if(user) {
-      user['contacts'] = newUser.contacts as string[];
-      user.save();
-    }
+    if(!user || Object.keys(user).length === 0 ) throw new Error('No user found')
+    
+    user.contacts = newUser.contacts as string[];
+    user.save();
+    ctx.body = user;
     ctx.status = 201;
 
   } catch (err) {
@@ -81,16 +87,16 @@ export const postUserList = async (ctx:Context) => {
 
 export const deleteContacts = async (ctx:Context) => {
   try {
-    const userId:string = ctx.request.body?.id as string;
+    const userId = ctx.request.body?.id;
     // what is ObjectId? 
     if(!userId) throw new Error('No user id provided')
-    const user = await User.findOne({ '_id': new ObjectId(userId) });
+    const user = await User.findOne({ '_id': new ObjectId(userId.toString()) });
     // add this condition to prevent user === undefined
-    if(user) {
-      user.contacts = [];
-      console.log('Found the following user: ', user);
-      user.save();
-    }
+    if(!user || Object.keys(user).length === 0 ) throw new Error('No user found')
+    
+    user.contacts = [];
+    console.log('Found the following user: ', user);
+    user.save();
     ctx.status = 204;
   } catch (err) {
     console.log('Error in the server deleteContacts: ', err);
@@ -100,10 +106,12 @@ export const deleteContacts = async (ctx:Context) => {
 
 export const deleteUser = (ctx:Context) => {
   try {
-    const userId:string = ctx.request.body?.id as string;
+    const userId = ctx.request.body?.id;
+    console.log('delete userId',userId)
+
     if(!userId) throw new Error('No user id provided')
     console.log('User ID to delete is: ', userId);
-    User.findOneAndDelete({ "_id": new ObjectId(userId) }, function(err:Error, docs:Document) {
+    User.findOneAndDelete({ "_id": new ObjectId(userId.toString()) }, function(err:Error, docs:Document) {
       if (err) {
         console.log('Error in delete: ', err);
       } else {
