@@ -90,7 +90,7 @@ export const deleteContacts = async (ctx:Context) => {
     const userId = ctx.request.body?.id;
     // what is ObjectId? 
     if(!userId) throw new Error('No user id provided')
-    const user = await User.findOne({ '_id': new ObjectId(userId.toString()) });
+    const user = await User.findOne({ _id: userId });
     // add this condition to prevent user === undefined
     if(!user || Object.keys(user).length === 0 ) throw new Error('No user found')
     

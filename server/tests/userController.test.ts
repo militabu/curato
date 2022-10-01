@@ -3,7 +3,8 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser'
 import { router } from '../router'
 import request  from 'supertest';
-import { User } from '../models/schema'
+import { User } from '../models/schema';
+import mongoose from '../db';
 
 const HOSTNAME = 'localhost';
 const PORT = 3001;
@@ -37,8 +38,10 @@ const mockUser = {
     ]  
   }
 
+
 afterEach(async() => {
     await User.deleteMany()
+    // await mongoose.connection.close()
 })
 
 // test getAllUsers function
@@ -192,6 +195,43 @@ describe('DELETE /delete-user without user details', () => {
         // delete user
         const deleteRes = await request(app.callback())
             .delete('/delete-user')
+            .send(null)
+            .set('Accept','application/json')
+        expect(deleteRes.statusCode).toBe(500);
+    })
+})
+
+describe('DELETE /delete-contacts returns success', () => { 
+    it('DELETE /delete-contacts successfully should return a success status', async() => {
+        // add user to the database
+        const addUserRes = await request(app.callback())
+            .post('/new-user')
+            .send(mockUser)
+            .set('Accept','application/json')
+        expect(addUserRes.statusCode).toBe(201);
+        mockUser.id = addUserRes.body._id
+        // delete user
+        const deleteRes = await request(app.callback())
+            .delete('/delete-contacts')
+            .send(mockUser)
+            .set('Accept','application/json')
+        expect(deleteRes.statusCode).toBe(204);
+
+        // request for the user details should return 400
+        const {body, statusCode} = await request(app.callback())
+            .post('/user')
+            .send(mockUser)
+            .set('Accept','application/json')
+        expect(statusCode).toBe(200);
+        expect(body.contacts).toMatchObject([]);
+    })
+})
+
+describe('DELETE /delete-contacts without user details', () => { 
+    it('DELETE /delete-contacts should return 500 error without user details', async() => {
+        // delete user
+        const deleteRes = await request(app.callback())
+            .delete('/delete-contacts')
             .send(null)
             .set('Accept','application/json')
         expect(deleteRes.statusCode).toBe(500);
