@@ -3,7 +3,7 @@ import { AlbumType, ScreenState } from "../../customTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { addAlbum, toggleAlbumEdit, setUploading, updateAlbum, updateActive } from "../../redux/actions";
+import { addAlbum, toggleAlbumEdit, setUploading, updateAlbum, updateActive } from "../actions";
 import axios, { AxiosResponse } from 'axios';
 import { toBase64 } from "../../utils/utils";
 import { postAlbum } from "../../utils/api-client";

@@ -2,7 +2,7 @@ import { UserType } from "../../customTypes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getUser } from "../../utils/api-client";
 import Contact from "./Contact";
-import * as actions from '../../redux/actions';
+import * as actions from '../actions';
 
 function UserList(props: { input: string }) {
 
