@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { ScreenState, AlbumType } from "./customTypes";
 import { getUser, getAllUsers } from './utils/api-client';
-import { getAlbums, getUsers } from './redux/actions';
+import { getAlbums, getUsers } from './components/actions';
 
 
 function App() {

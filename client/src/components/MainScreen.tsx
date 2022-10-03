@@ -6,7 +6,7 @@ import FavoritesScreen from "./screenComponents/FavoritesScreen";
 import AlbumViewScreen from "./screenComponents/AlbumViewScreen";
 import { Fab } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { toggleAlbumEdit } from "../redux/actions";
+import { toggleAlbumEdit } from "./actions";
 import { ScreenState } from "../customTypes";
 import AlbumEditScreen from "./screenComponents/AlbumEditScreen";
 
@@ -32,7 +32,7 @@ function MainScreen(): ReactElement {
 
   // Note: Only show the floating action button (Fab) on the Albums screen (screen 0), and not if editing or viewing an album.
   return (
-    <div className={`h-full flex flex-col justify-center items-center ${screenState.editAlbum ? '' : 'pb-20'} sm:bg-customPurple`}>
+    <div data-testid='mainscreen-1' className={`h-full flex flex-col justify-center items-center ${screenState.editAlbum ? '' : 'pb-20'} sm:bg-customPurple`}>
       {screen}
       {!screenState.viewAlbum && !screenState.editAlbum && screenState.screen === 0 ? (
         <Fab
