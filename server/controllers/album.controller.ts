@@ -55,12 +55,14 @@ export const postAlbum = async (ctx: Context) => {
 export const deleteAlbums = async (ctx:Context) => {
   try {
     const userId = ctx.request.body?.userId;
+    if(!userId) throw new Error('missing user details')
+    
     const user = await User.findOne({ _id: userId });
-    if(user) {
-      user.albums = [];
-      user.save();
-    }
-   
+    
+    if(!user || Object.keys(user).length === 0) throw new Error('User not found')
+    user.albums = [];
+    user.save();
+    
     ctx.status = 204;
     console.log(`User ${userId} albums removed`);
   } catch (err) {
