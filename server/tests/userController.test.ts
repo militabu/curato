@@ -4,7 +4,6 @@ import bodyParser from 'koa-bodyparser'
 import { router } from '../router'
 import request  from 'supertest';
 import { User } from '../models/schema';
-import mongoose from '../db';
 
 const HOSTNAME = 'localhost';
 const PORT = 3001;
