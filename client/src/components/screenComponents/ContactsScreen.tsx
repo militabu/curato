@@ -37,7 +37,7 @@ function ContactsScreen() : ReactElement {
         </div>
       </div>
       <div className="bg-customTeal w-full pl-6 py-1 text-xl font-semibold sm:rounded-md">
-        <h3>My Contacts</h3>
+        <h3 data-testid='header-contacts'>My Contacts</h3>
       </div>
       <div className="h-full w-full pt-4 overflow-y-auto flex flex-col justify-start items-center bg-customBlue sm:bg-customPurple">
         {userList

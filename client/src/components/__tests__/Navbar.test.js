@@ -1,6 +1,5 @@
 import { render, screen } from '../test-utils';
 import Navbar from '../Navbar';
-import MainScreen from '../MainScreen';
 import AlbumListScreen from '../screenComponents/AlbumListScreen'
 import Footermenu from '../FooterMenu'
 
@@ -35,14 +34,6 @@ test('when friends icon is clicked, should show the input bar', () =>{
 
 })
 
-
-
-
-test('should render MainScreen component', () => {
-    render(<MainScreen/>);
-    const mainscreen = screen.getByTestId('mainscreen-1');
-    expect(mainscreen).toBeInTheDocument();
-}); 
 
 test('should render Album List Screen component', () => {
     render(<AlbumListScreen/>);
