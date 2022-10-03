@@ -5,7 +5,7 @@ import CollectionsIcon from '@mui/icons-material/Collections';
 import PeopleIcon from '@mui/icons-material/People';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import * as actions from '../redux/actions';
+import * as actions from './actions';
 
 function FooterMenu(): ReactElement {
 
@@ -29,7 +29,7 @@ function FooterMenu(): ReactElement {
           dispatch(actions.changeScreen(newValue));
         }}
       > 
-        <BottomNavigationAction label="Albums" icon={<CollectionsIcon />} />
+        <BottomNavigationAction data-testid='album-element' label="Albums" icon={<CollectionsIcon />} />
         <BottomNavigationAction label="Friends" icon={<PeopleIcon />} />
         <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
       </BottomNavigation>

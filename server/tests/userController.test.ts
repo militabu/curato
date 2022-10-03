@@ -189,6 +189,7 @@ describe('DELETE /delete-user returns success', () => {
     })
 })
 
+// 
 describe('DELETE /delete-user without user details', () => { 
     it('DELETE /delete-user should return 500 error without user details', async() => {
         // delete user

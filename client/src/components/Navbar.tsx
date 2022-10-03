@@ -5,7 +5,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { ScreenState, UserType } from "../customTypes";
-import { editAlbum, changeScreen } from "../redux/actions";
+import { editAlbum, changeScreen } from "./actions";
 import Contact from "./contactComponents/Contact";
 
 function Navbar() : ReactElement {
@@ -28,7 +28,7 @@ function Navbar() : ReactElement {
   }
 
   return (
-    <>
+    <div data-testid='navbar-1'>
     <nav className="flex items-center justify-between pl-6 pr-3 py-3 z-50 bg-white sm:bg-customPurple sm:text-white sticky top-0 left-0 right-0">
       <h1 className="text-4xl sm:text-5xl font-header">Curato</h1>
       <div className="hidden sm:flex w-7/12 items-center justify-between text-2xl">
@@ -51,6 +51,7 @@ function Navbar() : ReactElement {
         </IconButton>
       </div>
     </nav>
+
     <div className={`${contactMenu ? 'flex' : 'hidden'} flex-col justify-center items-center`}>
         <button className="bg-customTeal font-semibold rounded-md w-40 px-4 py-1 my-2 float-right" onClick={shareHandler}>
             Public Share
@@ -60,7 +61,7 @@ function Navbar() : ReactElement {
           .map(contact => <Contact key={contact._id.toString()} callback={buttonHandler} contact={contact} text={'Share'} />)
         }
     </div>
-    </>
+    </div>
   )
 }
 
