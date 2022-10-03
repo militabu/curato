@@ -54,7 +54,7 @@ const MockAlbum = {
     // await mongoose.connection.close()
 })
 
-// test getAllUsers function
+// test postAlbum function without supplying user and album details
 describe('POST /albums endpoint returns error', () => {
     it('POST /albums should return a 400 error if there is no corresponding album or user', async() => {
        // need to insert userId first 
@@ -69,6 +69,7 @@ describe('POST /albums endpoint returns error', () => {
     })
 })
 
+// test postAlbum function with user details
 describe('POST /albums endpoint returns success', () => {
   it('POST /albums should return success', async() => {
      // need to insert userId first 
@@ -94,6 +95,7 @@ describe('POST /albums endpoint returns success', () => {
   })
 })
 
+// test deleteAlbums with user details
 describe('DELETE /delete endpoint returns success', () => {
   it('DELETE /delete should return success', async() => {
      // add new user with albums array
@@ -123,6 +125,7 @@ describe('DELETE /delete endpoint returns success', () => {
   })
 })
 
+// test deleteAlbums without user details
 describe('DELETE /delete endpoint with missing user details', () => {
   it('DELETE /delete without user details should return a 500 error', async() => {
       const response = await request(app.callback())
