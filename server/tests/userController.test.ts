@@ -44,7 +44,7 @@ afterEach(async() => {
 })
 
 // test getAllUsers function
-describe('GET /userlist endpoint with no corresponding userId', () => {
+describe.skip('GET /userlist endpoint with no corresponding userId', () => {
     it('GET /userlist should return an 400 error if there is no corresponding user', async() => {
         const response = await request(app.callback()).get('/userlist');
         expect(response.statusCode).toBe(400);
@@ -52,7 +52,7 @@ describe('GET /userlist endpoint with no corresponding userId', () => {
 })
 
 // test postUser and getAllUser functions with user details
-describe('POST /new-user endpoint with user details', () => {
+describe.skip('POST /new-user endpoint with user details', () => {
     it('POST /new-user should return the user details with a success response', async() => {
         const response = await request(app.callback())
             .post('/new-user')
@@ -75,7 +75,7 @@ describe('POST /new-user endpoint with user details', () => {
 })
 
 // test postUser function without supplying user details
-describe('POST /new-user endpoint without user details', () => {
+describe.skip('POST /new-user endpoint without user details', () => {
     it('POST /new-user should return 400 error if no user details are provided', async() => {
         const response = await request(app.callback())
             .post('/new-user')
@@ -86,7 +86,7 @@ describe('POST /new-user endpoint without user details', () => {
 })
 
 // test postUser and getUser functions
-describe('POST /user returns the same user details after POST /new-user', () => {
+describe.skip('POST /user returns the same user details after POST /new-user', () => {
     it('POST /user should return a success response', async() => {
         const response = await request(app.callback())
             .post('/new-user')
@@ -114,7 +114,7 @@ describe('POST /user returns the same user details after POST /new-user', () => 
 })
 
 // test getUser function without supplying user details
-describe('POST /user without passing user details', () => {
+describe.skip('POST /user without passing user details', () => {
     it('POST /user should return 404 error if no user details are passed', async() => {
         const {body, statusCode} = await request(app.callback())
         .post('/user')
@@ -125,7 +125,7 @@ describe('POST /user without passing user details', () => {
 })
 
 // test postUserList function with user details
-describe('POST /update-user returns the edited user details', () => { 
+describe.skip('POST /update-user returns the edited user details', () => { 
     it('POST /update-user should return a success response with the edited details', async() => {
         const response = await request(app.callback())
             .post('/new-user')
@@ -146,7 +146,7 @@ describe('POST /update-user returns the edited user details', () => {
 })
 
 // test postUserList function without user details
-describe('POST /update-user without user details', () => { 
+describe.skip('POST /update-user without user details', () => { 
     it('POST /update-user without sending user details should return a 400 error', async() => {
         const response = await request(app.callback())
             .post('/new-user')
@@ -164,7 +164,7 @@ describe('POST /update-user without user details', () => {
 })
 
 // test deleteUser function
-describe('DELETE /delete-user returns success', () => { 
+describe.skip('DELETE /delete-user returns success', () => { 
     it('DELETE /delete-user successfully should return a success status', async() => {
         // add user to the database
         const addUserRes = await request(app.callback())
@@ -189,7 +189,8 @@ describe('DELETE /delete-user returns success', () => {
     })
 })
 
-describe('DELETE /delete-user without user details', () => { 
+// 
+describe.skip('DELETE /delete-user without user details', () => { 
     it('DELETE /delete-user should return 500 error without user details', async() => {
         // delete user
         const deleteRes = await request(app.callback())
@@ -200,7 +201,7 @@ describe('DELETE /delete-user without user details', () => {
     })
 })
 
-describe('DELETE /delete-contacts returns success', () => { 
+describe.skip('DELETE /delete-contacts returns success', () => { 
     it('DELETE /delete-contacts successfully should return a success status', async() => {
         // add user to the database
         const addUserRes = await request(app.callback())
@@ -226,7 +227,7 @@ describe('DELETE /delete-contacts returns success', () => {
     })
 })
 
-describe('DELETE /delete-contacts without user details', () => { 
+describe.skip('DELETE /delete-contacts without user details', () => { 
     it('DELETE /delete-contacts should return 500 error without user details', async() => {
         // delete user
         const deleteRes = await request(app.callback())

@@ -38,8 +38,8 @@ const mockUser = {
   }
 
 const MockAlbum = {
-    id: "633703c4a9baea65b9af6677",
-    title: "testAlbum",
+    id: "633703c4a9baea65b9af6688",
+    title: "testAlbum2",
     date: Date.now(),
     description: "test album",
     favorite: true,
@@ -55,7 +55,7 @@ const MockAlbum = {
 })
 
 // test getAllUsers function
-describe('POST /albums endpoint returns error', () => {
+describe.skip('POST /albums endpoint returns error', () => {
     it('POST /albums should return a 400 error if there is no corresponding album or user', async() => {
        // need to insert userId first 
         const response = await request(app.callback())
@@ -69,16 +69,27 @@ describe('POST /albums endpoint returns error', () => {
     })
 })
 
-// describe.only('POST /albums endpoint returns success', () => {
-//   it('POST /albums should return success', async() => {
-//      // need to insert userId first 
-//       const response = await request(app.callback())
-//           .post('/albums')
-//           .send({
-//               userId: null, 
-//               album: null
-//           })
-//           .set('Accept','application/json')
-//       expect(response.statusCode).toBe(400);
-//   })
-// })
+describe.only('POST /albums endpoint returns success', () => {
+  it('POST /albums should return success', async() => {
+     // need to insert userId first 
+      const newUserRes = await request(app.callback())
+          .post('/new-user')
+          .send(mockUser)
+          .set('Accept','application/json')
+      expect(newUserRes.statusCode).toBe(201);
+      mockUser.id = newUserRes.body._id
+      const numAlbums = mockUser.albums.length
+
+      const response = await request(app.callback())
+          .post('/albums')
+          .send({
+              userId: mockUser.id, 
+              album: MockAlbum
+          })
+          .set('Accept','application/json')
+      console.log('response body',response.body)
+      expect(response.statusCode).toBe(201);
+      // test that the number of album is defined (given success)
+      expect(response.body.length).toBeDefined();
+  })
+})

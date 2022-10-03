@@ -7,14 +7,14 @@ export const postAlbum = async (ctx: Context) => {
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
-    if (!userId || !album) {
+    if (!userId || !album ) {
       throw new Error('Missing user input.')
     }
     // console.log("The album received is: ", album);
 
     // Either create the album on the user or update it if it already exists.
     // Existing albums will have a populated MongoDB ID.
-    if (!album.id || Object.keys(album.id).length === 0) {
+    if (!album.id) {
       // if album id is not available
       const user = await User.findOne({ _id: userId });
       const newAlbum = new Album(album);
@@ -30,17 +30,18 @@ export const postAlbum = async (ctx: Context) => {
       ctx.status=201;
     } else {     
       // if album id is already available 
-      const user = await User.findOne({ "_id": userId });
+      const user = await User.findOne({ _id: userId });
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
     
       user.albums.forEach((el, index) => {
         if (album!.id = el._id) {
-            user!.albums[index] = { ...album, _id: album.id}
+            user!.albums[index] = {...album, _id: album.id}
           }
           console.log("Searching for existing album, found: ", user!.albums[index]);
         })
         user.save();
-        ctx.status = 200;
+        ctx.body = user.albums
+        ctx.status = 201;
       }
     
   } catch (err) {
