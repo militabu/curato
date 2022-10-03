@@ -55,7 +55,7 @@ const MockAlbum = {
 })
 
 // test getAllUsers function
-describe.skip('POST /albums endpoint returns error', () => {
+describe('POST /albums endpoint returns error', () => {
     it('POST /albums should return a 400 error if there is no corresponding album or user', async() => {
        // need to insert userId first 
         const response = await request(app.callback())
@@ -69,16 +69,16 @@ describe.skip('POST /albums endpoint returns error', () => {
     })
 })
 
-describe.only('POST /albums endpoint returns success', () => {
-  it('POST /albums should return success', async() => {
-     // need to insert userId first 
-      const response = await request(app.callback())
-          .post('/albums')
-          .send({
-              userId: null, 
-              album: null
-          })
-          .set('Accept','application/json')
-      expect(response.statusCode).toBe(400);
-  })
-})
+// describe.only('POST /albums endpoint returns success', () => {
+//   it('POST /albums should return success', async() => {
+//      // need to insert userId first 
+//       const response = await request(app.callback())
+//           .post('/albums')
+//           .send({
+//               userId: null, 
+//               album: null
+//           })
+//           .set('Accept','application/json')
+//       expect(response.statusCode).toBe(400);
+//   })
+// })
