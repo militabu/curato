@@ -50,7 +50,6 @@ const postAlbum = async (userId:string, album: AlbumType) => {
   }
 }
 
-
 const getAllUsers = async () => {
   try {
     const response = await fetch(`${baseUrl}/userlist`);

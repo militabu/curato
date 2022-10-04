@@ -1,4 +1,6 @@
+import { Album } from '@mui/icons-material';
 import { combineReducers } from 'redux';
+import { addAlbum } from '../components/actions';
 import { AlbumType, UserType } from "../customTypes";
 import { postAlbum, updateUser } from '../utils/api-client';
 
@@ -68,21 +70,28 @@ const albumsReducer = (state = initialAlbumState, action: { type: string, payloa
       ];
       console.log('Updated state list is : ', updatedAlbumList);
       return updatedAlbumList;
+
     case 'TOGGLE_FAVE':
       const newAlbumList = [...state.map(album => {
-          // Update the album with matching ID
-          const updatedAlbum = album.id === action.payload 
-          ? {
-            ...album,
-            favorite: !album.favorite
-          }
-          : album;
-          // Update the album on the DB
-          if (album.id === action.payload) postAlbum(process.env.REACT_APP_USER, updatedAlbum);
+        // Update the album with matching ID
+        const updatedAlbum = album.id === action.payload 
+        ? {
+          ...album,
+          favorite: !album.favorite
+        }
+        : album;
+        // Update the album on the DB
+        // console.log(updatedAlbum)
+        if (album.id === action.payload) postAlbum(process.env.REACT_APP_USER, updatedAlbum);
           return updatedAlbum;
         })
       ];
       return newAlbumList;
+
+
+    
+
+
     case 'ADD_CONTACT_ALBUMS':
       console.log('Reducer trying to add contact albums: ', action.payload);
       return [...state, ...action.payload as AlbumType[]]

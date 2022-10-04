@@ -25,6 +25,9 @@ function AlbumViewScreen() : ReactElement {
     dispatch(actions.toggleActiveFavorite());
   }
 
+  console.warn('view screen component')
+
+
   return (
     <>
     {modalData.modal && <Modal imgSrc={modalData.imgSrc} callback={() => toggleModal(modalData.imgSrc)} />}

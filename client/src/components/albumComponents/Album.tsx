@@ -16,7 +16,11 @@ function Album(album: AlbumType): ReactElement {
     // Change the favorite property on the state of the album.
     // This action also writes to the DB to store the new favorite flag. 
     dispatch(actions.toggleFavorite(album.id));
+    // dispatch(actions.toggleFavorite(screenState.activeAlbum.id));
+    // dispatch(actions.toggleActiveFavorite());
   }
+
+  // console.warn('album component')
 
   return (
     <div 
