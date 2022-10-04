@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 
 export const postAlbum = async (ctx: Context) => {
   // should receive userId and album
+  console.log('request album',ctx.request.body?.album)
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
@@ -33,18 +34,28 @@ export const postAlbum = async (ctx: Context) => {
       // if album id is already available 
       const user = await User.findOne({ _id:  new ObjectId(userId.toString()) });
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
-    
-      user.albums.forEach((el, index) => {
-        if (album!.id = el._id) {
-            user!.albums[index] = {...album, _id: album.id}
-          }
-          console.log("Searching for existing album, found: ", user!.albums[index]);
-        })
+      
+      // revised logic
+      const newAlbums = user.albums.map((alb,index) => {
+        if(alb.id === album.id) {
+          return {...album, _id: new ObjectId(album.id.toString())}
+        }
+        return alb;
+      }) 
+      
+      // user.albums.forEach((el, index) => {
+      //   console.log(album.id)
+      //   if (album!.id = el._id) {
+      //       user!.albums[index] = {...album, _id: album.id}
+      //     }
+      //     // console.log("Searching for existing album, found: ", user!.albums[index]);
+      //   })
+        user.albums = newAlbums
         user.save();
         ctx.body = user.albums
         ctx.status = 201;
       }
-    
+      
   } catch (err) {
     console.log("Error in server postAlbum: ", err);
     ctx.status = 400;
