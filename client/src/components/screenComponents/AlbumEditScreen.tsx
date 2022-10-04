@@ -52,11 +52,11 @@ function AlbumEditScreen(): ReactElement {
     const newAlbum: AlbumType = await uploadSelectedImages() ?? {} as AlbumType;
     newAlbum['coverImg'] = newAlbum.images[0];
     setFormState(newAlbum);
-
+    
     // 2. Add this album to MongoDB so that we can get the MongoDB ID to complete the Album object
     // const newAlbum: AlbumType = { ...formState, coverImg: formState.images[0] };
     const albumID = await postAlbum(process.env.REACT_APP_USER, newAlbum);
-   
+    
     // 3. Add the new Album to the AlbumList state in Redux
     // Set the id for the album if it was just created in Mongo DB, otherwise we can update the album List and active album.
     if (!newAlbum.id) {
