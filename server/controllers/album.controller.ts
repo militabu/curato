@@ -5,7 +5,6 @@ import { ObjectId } from "mongodb";
 
 export const postAlbum = async (ctx: Context) => {
   // should receive userId and album
-  console.log(ctx.request.body)
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
