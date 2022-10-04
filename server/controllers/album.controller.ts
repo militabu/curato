@@ -1,9 +1,11 @@
 import { User, Album } from "../models/schema";
 import { Context } from "koa";
 import { IAlbumType } from '../types/AlbumType';
+import { ObjectId } from "mongodb";
 
 export const postAlbum = async (ctx: Context) => {
   // should receive userId and album
+  console.log(ctx.request.body)
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
@@ -16,7 +18,7 @@ export const postAlbum = async (ctx: Context) => {
     // Existing albums will have a populated MongoDB ID.
     if (!album.id) {
       // if album id is not available
-      const user = await User.findOne({ _id: userId });
+      const user = await User.findOne({ _id:  new ObjectId(userId.toString())});
       const newAlbum = new Album(album);
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
       
@@ -30,7 +32,7 @@ export const postAlbum = async (ctx: Context) => {
       ctx.status=201;
     } else {     
       // if album id is already available 
-      const user = await User.findOne({ _id: userId });
+      const user = await User.findOne({ _id:  new ObjectId(userId.toString()) });
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
     
       user.albums.forEach((el, index) => {
@@ -57,7 +59,7 @@ export const deleteAlbums = async (ctx:Context) => {
     const userId = ctx.request.body?.userId;
     if(!userId) throw new Error('missing user details')
     
-    const user = await User.findOne({ _id: userId });
+    const user = await User.findOne({ _id: new ObjectId(userId.toString()) });
     
     if(!user || Object.keys(user).length === 0) throw new Error('User not found')
     user.albums = [];
