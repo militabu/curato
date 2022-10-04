@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && nodemon ./dist/index.js",
     "build": "tsc",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --resetMocks"
   },
   "keywords": [],
   "author": "",
