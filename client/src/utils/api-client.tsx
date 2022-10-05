@@ -1,6 +1,7 @@
 import { AlbumType, UserType } from "../customTypes";
 
-const baseUrl = 'http://localhost:3210';
+const baseUrl = process.env.REACT_APP_BASE_URL;
+
 
 const getUser = async (userId: string) => {
   try {
