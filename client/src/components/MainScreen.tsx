@@ -38,7 +38,6 @@ function MainScreen(): ReactElement {
         <Fab
           data-testid='toggleAlbumEdit-btn'
           onClick={() => dispatch(toggleAlbumEdit())}
-          data-testid='toggleAlbumEdit-btn'
           className="right-8 sm:right-32"
           style={{
             position: "fixed",
