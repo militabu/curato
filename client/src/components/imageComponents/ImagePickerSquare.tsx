@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 function ImagePickerSquare ({ index, album, callback } : { index: number, album: AlbumType, callback: (event: React.FormEvent<HTMLInputElement>) => void }) : ReactElement {
 
   return (
-    <div key={index}>
+    <div key={index} data-testid={`image-upload-${index}`}>
       <label
         id={`image-box-${index}`}
         htmlFor={`image${index}`}

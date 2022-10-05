@@ -13,12 +13,13 @@ exports.getSharedAlbums = exports.deleteAlbums = exports.postAlbum = void 0;
 const schema_1 = require("../models/schema");
 const mongodb_1 = require("mongodb");
 const postAlbum = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     console.log('postAlbum');
     // should receive userId and album
+    console.log('request album', (_a = ctx.request.body) === null || _a === void 0 ? void 0 : _a.album);
     try {
-        const userId = (_a = ctx.request.body) === null || _a === void 0 ? void 0 : _a.userId;
-        const album = (_b = ctx.request.body) === null || _b === void 0 ? void 0 : _b.album;
+        const userId = (_b = ctx.request.body) === null || _b === void 0 ? void 0 : _b.userId;
+        const album = (_c = ctx.request.body) === null || _c === void 0 ? void 0 : _c.album;
         if (!userId || !album) {
             throw new Error('Missing user input.');
         }
@@ -27,7 +28,7 @@ const postAlbum = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         // Existing albums will have a populated MongoDB ID.
         if (!album.id) {
             // if album id is not available
-            const user = yield schema_1.User.findOne({ _id: userId });
+            const user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(userId.toString()) });
             const newAlbum = new schema_1.Album(album);
             if (!user || Object.keys(user).length === 0)
                 throw new Error('No user found');
@@ -43,7 +44,7 @@ const postAlbum = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else {
             // if album id is already available 
-            const user = yield schema_1.User.findOne({ _id: userId });
+            const user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(userId.toString()) });
             if (!user || Object.keys(user).length === 0)
                 throw new Error('No user found');
             user.albums.forEach((el, index) => {
@@ -66,15 +67,13 @@ const postAlbum = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.postAlbum = postAlbum;
-// export const updateAlbum = async (ctx: Context) => {
-// };
 const deleteAlbums = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
+    var _d;
     try {
-        const userId = (_c = ctx.request.body) === null || _c === void 0 ? void 0 : _c.userId;
+        const userId = (_d = ctx.request.body) === null || _d === void 0 ? void 0 : _d.userId;
         if (!userId)
             throw new Error('missing user details');
-        const user = yield schema_1.User.findOne({ _id: userId });
+        const user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(userId.toString()) });
         if (!user || Object.keys(user).length === 0)
             throw new Error('User not found');
         user.albums = [];
