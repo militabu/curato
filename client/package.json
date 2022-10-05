@@ -15,7 +15,10 @@
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
+<<<<<<< HEAD
     "cypress": "^10.9.0",
+=======
+>>>>>>> b366100b5246da9dc3555fefb569827602b04216
     "moment": "^2.29.4",
     "mongodb": "^4.10.0",
     "react": "^18.2.0",
@@ -64,7 +67,11 @@
   "devDependencies": {
     "@testing-library/react": "^13.4.0",
     "autoprefixer": "^10.4.12",
+<<<<<<< HEAD
     "eslint-plugin-cypress": "^2.12.1",
+=======
+    "cypress": "^10.9.0",
+>>>>>>> b366100b5246da9dc3555fefb569827602b04216
     "jest": "^27.5.1",
     "postcss": "^8.4.16",
     "react-test-renderer": "^18.2.0",
