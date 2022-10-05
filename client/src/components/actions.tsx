@@ -38,14 +38,6 @@ export const toggleFavorite = (id: string) => {
   }
 }
 
-// export const toggleFavorite = (payload: string) => {
-//   return {
-//     type: 'TOGGLE_FAVE',
-//     payload
-//   }
-// }
-
-
 export const toggleActiveFavorite = () => {
   return {
     type: 'TOGGLE_ACTIVE_FAVE'

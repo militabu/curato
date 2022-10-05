@@ -33,6 +33,7 @@ function App() {
         // console.log('Result of fetching user is: ', res);
         dispatch(getAlbums(res.albums));
       })
+      .catch(error => console.log(error))
 
       // NOTE: Abandoning this method. Originally the plan was to show my albums and shared albums on the same screen,
       // but functionality such as favorite toggling requires positional information from the state, which is messed up by 
@@ -46,7 +47,7 @@ function App() {
       // })
 
     // To populate the full list of contacts for searching, save it to the redux state here:
-    getAllUsers().then(res => dispatch(getUsers(res)));
+    getAllUsers().then(res => dispatch(getUsers(res))).catch(error => console.log(error));
   }, []);
 
   // To get any albums shared with us by our contacts, we can cycle through contacts and pull the user information for each.
@@ -72,11 +73,15 @@ function App() {
   // This works great on the mobile interface, but I'll need to keep the main navbar AND the editing navbar on desktop.
   return (
     <div className="flex flex-col" style={{height: "100vh"}}>
-      { screenState.editAlbum ? <></> : <Navbar /> }
+      { screenState.editingAlbum ? <></> : <Navbar /> }
       <MainScreen />
-      { screenState.editAlbum ? <></> : <FooterMenu /> }
+      { screenState.editingAlbum ? <></> : <FooterMenu /> }
     </div>
   )
 }
 
 export default App;
+function e(e: any, TypeError: TypeErrorConstructor) {
+  throw new Error('Function not implemented.');
+}
+

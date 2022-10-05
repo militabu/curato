@@ -52,7 +52,7 @@ function AlbumViewScreen() : ReactElement {
           { screenState.activeAlbum.images.map((image, index) => {
               return (
               <div key={index} onClick={() => toggleModal(image)} className="border-2 border-solid aspect-square flex items-center justify-center">
-                <img className="object-cover w-full h-full" src={image} alt='Modal popup'/>
+                <img  src={image} className="object-cover w-full h-full" alt='Album Picture'/>
               </div>
               );
             })

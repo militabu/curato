@@ -36,7 +36,7 @@ function AlbumEditScreen(): ReactElement {
   }
 
   // EVENT HANDLERS
-  const handleChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
     setFormState({
       ...formState,

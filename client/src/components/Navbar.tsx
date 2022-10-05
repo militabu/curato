@@ -34,17 +34,17 @@ function Navbar() : ReactElement {
       <div className="hidden sm:flex w-7/12 items-center justify-between text-2xl">
         <a href="#" onClick={() => dispatch(changeScreen(0))}>Albums</a>
         <a href="#" onClick={() => dispatch(changeScreen(1))}>Contacts</a>
-        <a href="#" onClick={() => dispatch(changeScreen(2))}>Favorites</a>
+        {/* <a href="#" onClick={() => dispatch(changeScreen(2))}>Favorites</a> */}
         <a href="#">Settings</a>
       </div>
       <div className="sm:hidden flex space-x-4">
-        { screen.viewAlbum ?
+        { screen.viewingAlbum ?
           <IconButton onClick={shareHandler} color='inherit'>
             <ShareIcon fontSize="large" style={{ color: share ? '#0d6efd' : '#000' }} /> 
           </IconButton> : <></>}
 
-        <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}} color='inherit'>
-          { screen.viewAlbum 
+        <IconButton onClick={screen.viewingAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}} color='inherit'>
+          { screen.viewingAlbum 
             ? <EditIcon fontSize="large" /> 
             : <SettingsIcon fontSize="large"/> 
           }

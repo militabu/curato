@@ -25,9 +25,10 @@ function ContactsScreen() : ReactElement {
   return (
     <div className="h-full w-full overflow-y-auto flex flex-col justify-start items-center bg-customBlue  sm:bg-customPurple sm:max-w-2xl sm:mt-4 sm:mb-10 sm:rounded-lg">
       <div className="w-full text-xl py-4 flex flex-col items-center sm:px-10">
+        <label htmlFor='search'>Search Contacts</label>
           <input
             className="peer w-10/12 py-2 pl-4 rounded-full"
-            id="outlined-basic"
+            id="search"
             value={searchState}
             onChange={searchHandler}
             placeholder="Search Contacts..."
