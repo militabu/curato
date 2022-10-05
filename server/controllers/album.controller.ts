@@ -6,7 +6,6 @@ import { ObjectId } from "mongodb";
 export const postAlbum = async (ctx: Context) => {
   console.log('postAlbum')
   // should receive userId and album
-  console.log('request album',ctx.request.body?.album)
   try {
     const userId = ctx.request.body?.userId;
     const album = <IAlbumType>ctx.request.body?.album;
@@ -19,7 +18,7 @@ export const postAlbum = async (ctx: Context) => {
     // Existing albums will have a populated MongoDB ID.
     if (!album.id) {
       // if album id is not available
-      const user = await User.findOne({ _id:  new ObjectId(userId.toString())});
+      const user = await User.findOne({ _id: userId });
       const newAlbum = new Album(album);
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
       console.log(newAlbum, 'controller')
@@ -33,7 +32,7 @@ export const postAlbum = async (ctx: Context) => {
       ctx.status=201;
     } else {     
       // if album id is already available 
-      const user = await User.findOne({ _id:  new ObjectId(userId.toString()) });
+      const user = await User.findOne({ _id: userId });
       if(!user || Object.keys(user).length === 0) throw new Error('No user found')
     
       user.albums.forEach((el, index) => {
@@ -51,7 +50,7 @@ export const postAlbum = async (ctx: Context) => {
         ctx.body = user.albums
         ctx.status = 201;
       }
-      
+    
   } catch (err) {
     console.log("Error in server postAlbum: ", err);
     ctx.status = 400;
@@ -59,12 +58,13 @@ export const postAlbum = async (ctx: Context) => {
 };
 
 
+
 export const deleteAlbums = async (ctx:Context) => {
   try {
     const userId = ctx.request.body?.userId;
     if(!userId) throw new Error('missing user details')
     
-    const user = await User.findOne({ _id: new ObjectId(userId.toString()) });
+    const user = await User.findOne({ _id: userId });
     
     if(!user || Object.keys(user).length === 0) throw new Error('User not found')
     user.albums = [];

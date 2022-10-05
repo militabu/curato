@@ -22,9 +22,9 @@ function MainScreen(): ReactElement {
     <FavoritesScreen />,
   ];
 
-  const screen = screenState.editingAlbum ? (
+  const screen = screenState.editAlbum ? (
     <AlbumEditScreen />
-  ) : screenState.viewingAlbum ? (
+  ) : screenState.viewAlbum ? (
     <AlbumViewScreen />
   ) : (
     screensList[screenState.screen]
@@ -32,9 +32,9 @@ function MainScreen(): ReactElement {
 
   // Note: Only show the floating action button (Fab) on the Albums screen (screen 0), and not if editing or viewing an album.
   return (
-    <div data-testid='mainscreen-1' className={`h-full flex flex-col justify-center items-center ${screenState.editingAlbum ? '' : 'pb-20'} sm:bg-customPurple`}>
+    <div data-testid='mainscreen-1' className={`h-full flex flex-col justify-center items-center ${screenState.editAlbum ? '' : 'pb-20'} sm:bg-customPurple`}>
       {screen}
-      {!screenState.viewingAlbum && !screenState.editingAlbum && screenState.screen === 0 ? (
+      {!screenState.viewAlbum && !screenState.editAlbum && screenState.screen === 0 ? (
         <Fab
           onClick={() => dispatch(toggleAlbumEdit())}
           data-testid='toggleAlbumEdit-btn'

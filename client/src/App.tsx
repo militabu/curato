@@ -73,9 +73,9 @@ function App() {
   // This works great on the mobile interface, but I'll need to keep the main navbar AND the editing navbar on desktop.
   return (
     <div className="flex flex-col" style={{height: "100vh"}}>
-      { screenState.editingAlbum ? <></> : <Navbar /> }
+      { screenState.editAlbum ? <></> : <Navbar /> }
       <MainScreen />
-      { screenState.editingAlbum ? <></> : <FooterMenu /> }
+      { screenState.editAlbum ? <></> : <FooterMenu /> }
     </div>
   )
 }

@@ -20,8 +20,8 @@ export type AlbumType = {
 
 export type ScreenState = {
   screen: number;
-  viewingAlbum: boolean;
-  editingAlbum: boolean;
+  viewAlbum: boolean;
+  editAlbum: boolean;
   uploading: boolean;
   offline: boolean;
   activeAlbum: AlbumType;

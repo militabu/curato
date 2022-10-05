@@ -29,9 +29,9 @@ function FooterMenu(): ReactElement {
           dispatch(actions.changeScreen(newValue));
         }}
       > 
-        <BottomNavigationAction data-testid='album-element' label="Albums" icon={<CollectionsIcon />} />
-        <BottomNavigationAction label="Friends" icon={<PeopleIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+        <BottomNavigationAction href="#albums" data-testid='album-element' label="Albums" icon={<CollectionsIcon />} />
+        <BottomNavigationAction href="#friends" label="Friends" icon={<PeopleIcon />} />
+        <BottomNavigationAction href="#favorites" label="Favorites" icon={<FavoriteIcon />} />
       </BottomNavigation>
     </div>
   );

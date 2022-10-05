@@ -32,19 +32,19 @@ function Navbar() : ReactElement {
     <nav className="flex items-center justify-between pl-6 pr-3 py-3 z-50 bg-white sm:bg-customPurple sm:text-white sticky top-0 left-0 right-0">
       <h1 className="text-4xl sm:text-5xl font-header">Curato</h1>
       <div className="hidden sm:flex w-7/12 items-center justify-between text-2xl">
-        <a href="#" onClick={() => dispatch(changeScreen(0))}>Albums</a>
-        <a href="#" onClick={() => dispatch(changeScreen(1))}>Contacts</a>
-        {/* <a href="#" onClick={() => dispatch(changeScreen(2))}>Favorites</a> */}
-        <a href="#">Settings</a>
+        <a href="#albums" onClick={() => dispatch(changeScreen(0))}>Albums</a>
+        <a href="#contacts" onClick={() => dispatch(changeScreen(1))}>Contacts</a>
+        <a href="#favorites" onClick={() => dispatch(changeScreen(2))}>Favorites</a>
+        <a href="#settings">Settings</a>
       </div>
       <div className="sm:hidden flex space-x-4">
-        { screen.viewingAlbum ?
+        { screen.viewAlbum ?
           <IconButton onClick={shareHandler} color='inherit'>
             <ShareIcon fontSize="large" style={{ color: share ? '#0d6efd' : '#000' }} /> 
           </IconButton> : <></>}
 
-        <IconButton onClick={screen.viewingAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}} color='inherit'>
-          { screen.viewingAlbum 
+        <IconButton onClick={screen.viewAlbum ? () => dispatch(editAlbum(screen.activeAlbum)) : () => {}} color='inherit'>
+          { screen.viewAlbum 
             ? <EditIcon fontSize="large" /> 
             : <SettingsIcon fontSize="large"/> 
           }
