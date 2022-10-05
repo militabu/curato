@@ -36,6 +36,7 @@ function MainScreen(): ReactElement {
       {screen}
       {!screenState.viewingAlbum && !screenState.editingAlbum && screenState.screen === 0 ? (
         <Fab
+          data-testid='toggleAlbumEdit-btn'
           onClick={() => dispatch(toggleAlbumEdit())}
           data-testid='toggleAlbumEdit-btn'
           className="right-8 sm:right-32"
