@@ -14,12 +14,14 @@ function App() {
   const screenState: ScreenState = useAppSelector(state => state.screenReducer)
 
   const dispatch = useAppDispatch();
+  
+  const userId = process.env.REACT_APP_USER
+  if(!userId) return (<></>)
 
   useEffect(() => {
-    const userId = process.env.REACT_APP_USER
     // console.log('App level user ID is: ', userId);
-
     // On app loading, create the list of albums to show by getting the Mongo DB document for the current user.
+<<<<<<< HEAD
     getUser(userId)
       .then((res) => {
         // Create a local list of contacts for sourcing shared albums
@@ -34,20 +36,47 @@ function App() {
         dispatch(getAlbums(res.albums));
       })
       .catch(error => console.log(error))
+=======
+    if(userId) {
+        getUser(userId)
+        .then((res) => {
+          // Create a local list of contacts for sourcing shared albums
+          // const myContacts = res.contacts;
+          // A bit awkward, but we need to replace the '_id' property from Mongo 
+          // with the 'id' property expected by the AlbumType
+          for (let album of res.albums) {
+            album.id = album._id;
+            delete album._id;
+          }
+          // console.log('Result of fetching user is: ', res);
+          dispatch(getAlbums(res.albums));
+        })
+        .catch(error => {return})
+>>>>>>> 2dfa635 (add code reviews from Kostas and console errors)
 
-      // NOTE: Abandoning this method. Originally the plan was to show my albums and shared albums on the same screen,
-      // but functionality such as favorite toggling requires positional information from the state, which is messed up by 
-      // showing other people's albums. The solution seems to be adding them to my album list when shared.
-      // .then(async (_) => {
-      //   console.log('Initially, fullAlbumsList is: ', fullAlbumList);
-      //   const sharedAlbums = await getSharedAlbums(myContacts);  
-      //   fullAlbumList.push(...sharedAlbums);
-      //   console.log('Adding shared albums, fullAlbumsList is: ', fullAlbumList);
-      //   dispatch(getAlbums(fullAlbumList));
-      // })
+        // NOTE: Abandoning this method. Originally the plan was to show my albums and shared albums on the same screen,
+        // but functionality such as favorite toggling requires positional information from the state, which is messed up by 
+        // showing other people's albums. The solution seems to be adding them to my album list when shared.
+        // .then(async (_) => {
+        //   console.log('Initially, fullAlbumsList is: ', fullAlbumList);
+        //   const sharedAlbums = await getSharedAlbums(myContacts);  
+        //   fullAlbumList.push(...sharedAlbums);
+        //   console.log('Adding shared albums, fullAlbumsList is: ', fullAlbumList);
+        //   dispatch(getAlbums(fullAlbumList));
+        // })
 
+<<<<<<< HEAD
     // To populate the full list of contacts for searching, save it to the redux state here:
     getAllUsers().then(res => dispatch(getUsers(res))).catch(error => console.log(error));
+=======
+      // To populate the full list of contacts for searching, save it to the redux state here:
+      getAllUsers()
+        .then(res => {
+          dispatch(getUsers(res))
+        })
+        .catch(error => {return})
+    }
+>>>>>>> 2dfa635 (add code reviews from Kostas and console errors)
   }, []);
 
   // To get any albums shared with us by our contacts, we can cycle through contacts and pull the user information for each.

@@ -13,8 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const DBPATH = 'mongodb://localhost:27017/curato'; // production
-const DBTest = 'mongodb://localhost:27017/test'; // test
+require('dotenv').config();
+const DBPATH = process.env.DBPATH; // production
+const DBTest = process.env.DBTEST; // test
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         yield mongoose_1.default.connect(DBPATH);

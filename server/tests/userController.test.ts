@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser'
 import { router } from '../router'
 import request  from 'supertest';
 import { User } from '../models/schema';
+import { mockUser } from '../mocks/mocks';
 
 const HOSTNAME = 'localhost';
 const PORT = 3001;
@@ -13,43 +14,11 @@ export const app = new Koa();
 app.use(bodyParser());
 app.use(router.routes());
 
-const mockUser = {
-    userName:"testUser",
-    userImg: "localhost://testUser.com",
-    contacts: ["user2345678"],
-    friendsAlbums: [
-      {
-        userId: "user111111",
-        albumId: "album111111"    
-      }
-    ],
-    albums:[
-    {
-        id: "633703c4a9baea65b9af6677",
-        title: "testAlbum",
-        date: Date.now(),
-        description: "test album",
-        favorite: true,
-        coverImg: "localhost://testAlbum.com",
-        sharedWith: ["111122223333"],
-        images: ["localhost://testImage.com"],
-    }
-    ]  
-  }
-
-
 afterEach(async() => {
     await User.deleteMany()
     // await mongoose.connection.close()
 })
 
-// test getAllUsers function
-describe('GET /userlist endpoint with no corresponding userId', () => {
-    it('GET /userlist should return an 400 error if there is no corresponding user', async() => {
-        const response = await request(app.callback()).get('/userlist');
-        expect(response.statusCode).toBe(400);
-    })
-})
 
 // test postUser and getAllUser functions with user details
 describe('POST /new-user endpoint with user details', () => {
@@ -104,12 +73,6 @@ describe('POST /user returns the same user details after POST /new-user', () => 
         expect(body.userName).toBe('testUser')
         expect(body.userImg).toBe('localhost://testUser.com')
         expect(body.contacts).toMatchObject(['user2345678'])
-        expect(body.friendsAlbums).toMatchObject([
-            {
-              userId: "user111111",
-              albumId: "album111111"    
-            }
-          ])
     })
 })
 
@@ -125,8 +88,8 @@ describe('POST /user without passing user details', () => {
 })
 
 // test postUserList function with user details
-describe('POST /update-user returns the edited user details', () => { 
-    it('POST /update-user should return a success response with the edited details', async() => {
+describe('PUT /update-user returns the edited user details', () => { 
+    it('PUT /update-user should return a success response with the edited details', async() => {
         const response = await request(app.callback())
             .post('/new-user')
             .send(mockUser)
@@ -137,7 +100,7 @@ describe('POST /update-user returns the edited user details', () => {
         mockUser.contacts.push(newContact)
         // change user contacts
         const res = await request(app.callback())
-            .post('/update-user')
+            .put('/update-user')
             .send(mockUser)
             .set('Accept','application/json')
         expect(res.statusCode).toBe(201);
@@ -146,8 +109,8 @@ describe('POST /update-user returns the edited user details', () => {
 })
 
 // test postUserList function without user details
-describe('POST /update-user without user details', () => { 
-    it('POST /update-user without sending user details should return a 400 error', async() => {
+describe('PUT /update-user without user details', () => { 
+    it('PUT /update-user without sending user details should return a 400 error', async() => {
         const response = await request(app.callback())
             .post('/new-user')
             .send(mockUser)
@@ -156,7 +119,7 @@ describe('POST /update-user without user details', () => {
         // change user contacts
         // sending null request to the end-point
         const res = await request(app.callback())
-            .post('/update-user')
+            .put('/update-user')
             .send(null)
             .set('Accept','application/json')
         expect(res.statusCode).toBe(400);
@@ -180,24 +143,18 @@ describe('DELETE /delete-user returns success', () => {
             .set('Accept','application/json')
         expect(deleteRes.statusCode).toBe(204);
 
-        // request for the user details should return 400
-        const {statusCode} = await request(app.callback())
-            .post('/user')
-            .send(mockUser)
-            .set('Accept','application/json')
-        expect(statusCode).toBe(400);
     })
 })
 
 // 
 describe('DELETE /delete-user without user details', () => { 
-    it('DELETE /delete-user should return 500 error without user details', async() => {
+    it('DELETE /delete-user should return 400 error without user details', async() => {
         // delete user
         const deleteRes = await request(app.callback())
             .delete('/delete-user')
             .send(null)
             .set('Accept','application/json')
-        expect(deleteRes.statusCode).toBe(500);
+        expect(deleteRes.statusCode).toBe(400);
     })
 })
 
@@ -217,7 +174,6 @@ describe('DELETE /delete-contacts returns success', () => {
             .set('Accept','application/json')
         expect(deleteRes.statusCode).toBe(204);
 
-        // request for the user details should return 400
         const {body, statusCode} = await request(app.callback())
             .post('/user')
             .send(mockUser)
@@ -228,12 +184,12 @@ describe('DELETE /delete-contacts returns success', () => {
 })
 
 describe('DELETE /delete-contacts without user details', () => { 
-    it('DELETE /delete-contacts should return 500 error without user details', async() => {
+    it('DELETE /delete-contacts should return 400 error without user details', async() => {
         // delete user
         const deleteRes = await request(app.callback())
             .delete('/delete-contacts')
             .send(null)
             .set('Accept','application/json')
-        expect(deleteRes.statusCode).toBe(500);
+        expect(deleteRes.statusCode).toBe(400);
     })
 })

@@ -6,7 +6,7 @@ export const router = new Router();
 
 router.post('/user', (ctx) => getUser(ctx));
 router.post('/new-user', (ctx) => postUser(ctx));
-router.post('/update-user', (ctx) => postUserList(ctx));
+router.put('/update-user', (ctx) => postUserList(ctx));
 router.get('/userlist', (ctx) => getAllUsers(ctx));
 router.delete('/delete-user', (ctx) => deleteUser(ctx));
 

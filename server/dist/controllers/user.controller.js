@@ -20,10 +20,10 @@ const getUser = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         if (!id)
             throw new mongoose_1.Error('User id is not provided');
         console.log('Getting user: ', id);
-        let user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(id.toString()) });
+        const user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(id.toString()) });
         // add this condition to prevent user === undefined
         if (!user || Object.keys(user).length === 0)
-            throw new mongoose_1.Error('User data is not provided');
+            ctx.body = {};
         ctx.body = user;
         ctx.status = 200;
     }
@@ -54,8 +54,7 @@ const getAllUsers = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userList = yield schema_1.User.find();
         // add this condition to prevent user === undefined
-        if (!userList || Object.keys(userList).length === 0)
-            throw new mongoose_1.Error('User data is not provided');
+        // if(!userList || Object.keys(userList).length === 0 ) throw new Error('User data is not provided')
         if (userList) {
             ctx.body = userList.map((user) => {
                 return {
@@ -104,7 +103,7 @@ const deleteContacts = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         // what is ObjectId? 
         if (!userId)
             throw new mongoose_1.Error('No user id provided');
-        const user = yield schema_1.User.findOne({ _id: userId });
+        const user = yield schema_1.User.findOne({ _id: new mongodb_1.ObjectId(userId.toString()) });
         // add this condition to prevent user === undefined
         if (!user || Object.keys(user).length === 0)
             throw new mongoose_1.Error('No user found');
@@ -114,8 +113,8 @@ const deleteContacts = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
         ctx.status = 204;
     }
     catch (err) {
-        console.log('Error in the server deleteContacts: ', err);
-        ctx.status = 500;
+        console.log('Error in deleteContacts: ', err);
+        ctx.status = 400;
     }
 });
 exports.deleteContacts = deleteContacts;
@@ -129,8 +128,8 @@ const deleteUser = (ctx) => {
         console.log('User ID to delete is: ', userId);
         schema_1.User.findOneAndDelete({ "_id": new mongodb_1.ObjectId(userId.toString()) }, function (err, docs) {
             if (err || !docs) {
-                console.log('Error in delete: ', err);
-                ctx.status = 500;
+                console.log('Error in deleteUser: ', err);
+                ctx.status = 400;
             }
             else {
                 console.log('Deleted user: ', docs);
@@ -139,8 +138,8 @@ const deleteUser = (ctx) => {
         ctx.status = 204;
     }
     catch (err) {
-        console.log('Error in the server deleteUser: ', err);
-        ctx.status = 500;
+        console.log('Error in deleteUser: ', err);
+        ctx.status = 400;
     }
 };
 exports.deleteUser = deleteUser;

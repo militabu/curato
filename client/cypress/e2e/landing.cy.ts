@@ -15,7 +15,7 @@ describe('Testing works', () => {
     cy.get("[data-testid='toggleAlbumEdit-btn']").should('exist')
   })
 
-  // submit ToggleImageEdit Form
+  //  click into ToggleEditAlbum button
   it('Click into the toggleEditAlbum button and form elements exist',()=> {
     cy.get("[data-testid='toggleAlbumEdit-btn']").click()
     cy.contains('New Album')
@@ -28,7 +28,7 @@ describe('Testing works', () => {
   })
 
   // click into ToggleImageEdit form and submit
-  it('Click into the toggleEditAlbum button and form elements exist',()=> {
+  it('Click into the toggleEditAlbum button and submit form with photo',()=> {
     cy.get("[data-testid='toggleAlbumEdit-btn']").click()
     cy.get('#imageForm > input').eq(0).type('test1')
     cy.get('#imageForm > input').eq(1).invoke('val').then((text)=> {

@@ -1,9 +1,9 @@
-// @ts-nocheck
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser'
 import { router } from '../router'
 import request  from 'supertest';
 import { Album, User } from '../models/schema';
+import { mockUser, mockAlbum } from '../mocks/mocks';
 
 const HOSTNAME = 'localhost';
 const PORT = 3001;
@@ -13,42 +13,8 @@ export const app = new Koa();
 app.use(bodyParser());
 app.use(router.routes());
 
-const mockUser = {
-    userName:"testUser",
-    userImg: "localhost://testUser.com",
-    contacts: ["user2345678"],
-    friendsAlbums: [
-      {
-        userId: "user111111",
-        albumId: "album111111"    
-      }
-    ],
-    albums:[
-    {
-        id: "633703c4a9baea65b9af6677",
-        title: "testAlbum",
-        date: Date.now(),
-        description: "test album",
-        favorite: true,
-        coverImg: "localhost://testAlbum.com",
-        sharedWith: ["111122223333"],
-        images: ["localhost://testImage.com"],
-    }
-    ]  
-  }
 
-const MockAlbum = {
-    id: "633703c4a9baea65b9af6688",
-    title: "testAlbum2",
-    date: Date.now(),
-    description: "test album",
-    favorite: true,
-    coverImg: "localhost://testAlbum.com",
-    sharedWith: ["111122223333"],
-    images: ["localhost://testImage.com"],
-}
-
-  afterEach(async() => {
+afterEach(async() => {
     await User.deleteMany()
     await Album.deleteMany()
     // await mongoose.connection.close()
@@ -85,7 +51,7 @@ describe('POST /albums endpoint returns success', () => {
           .post('/albums')
           .send({
               userId: mockUser.id, 
-              album: MockAlbum
+              album: mockAlbum
           })
           .set('Accept','application/json')
       console.log('response body',response.body)
