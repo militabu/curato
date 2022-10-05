@@ -18,5 +18,4 @@ exports.router.delete('/delete-contacts', (ctx) => (0, user_controller_1.deleteC
 // router.get('/shared-albums', (ctx) => getSharedAlbums(ctx));
 // The user stores all of the albums, so we can fetch them all at the same time, but to update specific albums let's have a route.
 exports.router.post('/albums', (ctx) => (0, album_controller_1.postAlbum)(ctx));
-// router.put('/albums/update', (ctx) => updateAlbum(ctx));
 exports.router.delete('/delete', (ctx) => (0, album_controller_1.deleteAlbums)(ctx));

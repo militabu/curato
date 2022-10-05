@@ -66,8 +66,6 @@ const postAlbum = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.postAlbum = postAlbum;
-// export const updateAlbum = async (ctx: Context) => {
-// };
 const deleteAlbums = (ctx) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
     try {
