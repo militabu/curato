@@ -21,7 +21,7 @@ Click here to watch the app youtube demo:
 4. Run ``npm run start`` from the *server root folder* to start the server app at ``http://localhost:3210/``
 
 ## TECH STACKS
-* **Frontend** - React
+* **Frontend** - React & Redux
 * **Server** - Node & Koa
 * **Database** - MongoDB with Mongoose ORM
 * **Testing** - Jest and Cypress
